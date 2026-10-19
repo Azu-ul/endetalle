@@ -1,0 +1,149 @@
+
+export interface Author {
+  name: string;
+  avatarUrl: string;
+  role: string;
+  team?: string;
+}
+
+export interface ClientUser {
+  id: string;
+  name: string;
+  email: string;
+  avatarUrl: string;
+  plan: 'Pro' | 'Basic' | 'Enterprise';
+  status: 'Active' | 'Expired' | 'Trial';
+  subscriptionStart: string;
+  subscriptionEnd: string;
+  monthlyFee: number;
+  // New Profile Fields
+  profession?: string;
+  bio?: string;
+  birthDate?: string;
+  interests?: string[];
+  coverUrl?: string;
+  favoriteDetailIds?: string[];
+}
+
+export interface ErrorReport {
+  id: string;
+  detailId: string;
+  detailTitle: string;
+  description: string;
+  status: 'Pending' | 'Resolved';
+  submittedAt: string;
+}
+
+export interface Comment {
+  id: string;
+  detailId: string;
+  authorName: string;
+  authorAvatar: string;
+  text: string;
+  timestamp: string;
+  role?: string;
+}
+
+export interface InternalMessage {
+  id: string;
+  sender: string;
+  avatar: string;
+  text: string;
+  time: string;
+  unread: boolean;
+}
+
+export interface SiteConfig {
+  siteTitle: string;
+  headerImageUrl: string;
+  maintenanceMode: boolean;
+  socialLinks: {
+    twitter?: string;
+    github?: string;
+    linkedin?: string;
+    instagram?: string;
+  };
+  termsContent?: string;
+  privacyContent?: string;
+  // Editable Texts
+  homeTitle?: string;
+  homeSubtitle?: string;
+  footerText?: string;
+  // Paywall Texts
+  paywallTitle?: string;
+  paywallDescription?: string;
+  paywallButtonText?: string;
+}
+
+export interface PricingPlan {
+  id: string;
+  name: string;
+  price: number;
+  interval: 'mo' | 'yr';
+  description: string;
+  features: string[];
+  isRecommended?: boolean;
+  highlightColor?: string;
+}
+
+export interface NewsletterSubscriber {
+  id: string;
+  email: string;
+  subscribedAt: string;
+  status: 'Subscribed' | 'Unsubscribed';
+}
+
+export interface Tag {
+  id: string;
+  name: string;
+}
+
+// NEW HIERARCHICAL CATEGORY DEFINITION
+export interface CategoryDef {
+  id: string;
+  name: string;
+  imageUrl: string;
+  subcategories: string[];
+}
+
+export type PublicationStatus = 'Published' | 'Draft' | 'Archived';
+export type AccessLevel = 'Public' | 'Pro' | 'Enterprise';
+
+export interface ConstructionDetail {
+  id: string;
+  title: string;
+  category: string; // Parent Category Name
+  subcategory?: string; // Optional Child Category
+  tags?: string[];
+  description: string;
+  imageUrl: string;
+  specs: string[];
+  materials: string[];
+  drawings: {
+    type: 'Section' | 'Plan' | 'Elevation' | 'Axonometric' | 'Detail';
+    url: string;
+    caption: string;
+  }[];
+  author: Author;
+  isVerified: boolean;
+  likes: number;
+  status: PublicationStatus;
+  accessLevel: AccessLevel;
+  publishedDate: string;
+  slug?: string;
+  seoTitle?: string;
+  metaDescription?: string;
+}
+
+export interface LiveStat {
+  visitors: number;
+  users: number;
+  staff: number;
+  trend: number[];
+}
+
+export interface ChatMessage {
+  role: 'user' | 'model';
+  text: string;
+  timestamp: number;
+}
