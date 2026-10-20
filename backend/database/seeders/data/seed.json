@@ -1,0 +1,592 @@
+{
+  "categories": [
+    {
+      "name": "Fundaciones",
+      "imageUrl": "https://images.unsplash.com/photo-1541888946-4c9f7a637a71?q=80&w=1000&auto=format&fit=crop",
+      "subcategories": []
+    },
+    {
+      "name": "Mamposterías",
+      "imageUrl": "https://images.unsplash.com/photo-1590074218887-8d070b4a441e?q=80&w=1000&auto=format&fit=crop",
+      "subcategories": []
+    },
+    {
+      "name": "Solados",
+      "imageUrl": "https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?q=80&w=1000&auto=format&fit=crop",
+      "subcategories": []
+    },
+    {
+      "name": "Cielorrasos",
+      "imageUrl": "https://images.unsplash.com/photo-1506192135-24285223e717?q=80&w=1000&auto=format&fit=crop",
+      "subcategories": []
+    },
+    {
+      "name": "Estructuras",
+      "imageUrl": "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop",
+      "subcategories": []
+    },
+    {
+      "name": "Escaleras",
+      "imageUrl": "https://images.unsplash.com/photo-1505334086732-90141b714c38?q=80&w=1000&auto=format&fit=crop",
+      "subcategories": []
+    },
+    {
+      "name": "Entrepisos",
+      "imageUrl": "https://images.unsplash.com/photo-1588667822501-140f0c058097?q=80&w=1000&auto=format&fit=crop",
+      "subcategories": [
+        "Steelframe",
+        "Metálicas",
+        "Madera",
+        "Cementícias",
+        "Otras"
+      ]
+    },
+    {
+      "name": "Cubiertas",
+      "imageUrl": "https://images.unsplash.com/photo-1628744876497-eb30460be9f6?q=80&w=1000&auto=format&fit=crop",
+      "subcategories": [
+        "Tradicionales",
+        "Metálicas"
+      ]
+    },
+    {
+      "name": "Instalaciones",
+      "imageUrl": "https://images.unsplash.com/photo-1542013936693-884638332954?q=80&w=1000&auto=format&fit=crop",
+      "subcategories": [
+        "Agua fría y caliente",
+        "Pluviales",
+        "Cloacales",
+        "Electricidad",
+        "AA",
+        "Otros"
+      ]
+    }
+  ],
+  "tags": [
+    "Hormigón",
+    "Acero",
+    "Madera",
+    "Sostenible",
+    "Prefabricado"
+  ],
+  "config": {
+    "siteTitle": "enDetalle",
+    "headerImageUrl": "https://images.unsplash.com/photo-1487958449943-2429e8be8625?q=80&w=2000&auto=format&fit=crop",
+    "maintenanceMode": false,
+    "socialLinks": {
+      "twitter": "https://twitter.com",
+      "github": "https://github.com",
+      "linkedin": "https://linkedin.com",
+      "instagram": "https://instagram.com"
+    },
+    "termsContent": "\n1. ACEPTACIÓN DE LOS TÉRMINOS\nAl acceder y utilizar el sitio web enDetalle (el \"Servicio\"), usted acepta cumplir con estos Términos de Uso. Si no está de acuerdo con alguna parte de los términos, no podrá acceder al Servicio.\n\n2. USO DE LICENCIA\nSe concede permiso para descargar temporalmente una copia de los materiales (información o software) en el sitio web de enDetalle solo para visualización transitoria personal y no comercial (Plan Estudiante) o uso profesional (Plan Técnico). Esta es la concesión de una licencia, no una transferencia de título.\n\n3. PROPIEDAD INTELECTUAL\nEl Servicio y su contenido original, características y funcionalidad son y seguirán siendo propiedad exclusiva de enDetalle y sus licenciantes.\n\n4. CUENTAS DE USUARIO\nCuando crea una cuenta con nosotros, debe proporcionarnos información que sea precisa, completa y actual en todo momento. El incumplimiento de esto constituye una violación de los términos.\n\n5. TERMINACIÓN\nPodemos terminar o suspender su cuenta inmediatamente, sin previo aviso o responsabilidad, por cualquier motivo, incluido, entre otros, si incumple los Términos.\n",
+    "privacyContent": "\n1. RECOPILACIÓN DE INFORMACIÓN\nRecopilamos información que usted nos proporciona directamente cuando se registra, realiza una compra, se suscribe a nuestro boletín o se comunica con nosotros.\n\n2. USO DE LA INFORMACIÓN\nUsamos la información que recopilamos para:\n- Proporcionar, mantener y mejorar nuestros servicios.\n- Procesar transacciones y enviar avisos relacionados.\n- Enviar comunicaciones técnicas, actualizaciones y alertas de seguridad.\n\n3. COMPARTIR INFORMACIÓN\nNo compartimos su información personal con terceros, excepto en las circunstancias limitadas descritas en esta política (proveedores de servicios, cumplimiento legal).\n\n4. SEGURIDAD DE DATOS\nTomamos medidas razonables para ayudar a proteger su información personal contra pérdida, robo, uso indebido y acceso no autorizado.\n\n5. SUS DERECHOS\nTiene derecho a acceder, corregir o eliminar su información personal. Puede administrar sus preferencias de comunicación en la configuración de su cuenta.\n",
+    "homeTitle": "enDetalle",
+    "homeSubtitle": "La plataforma colaborativa definitiva para arquitectos e ingenieros. Documentación verificada y detalles constructivos de alta precisión.",
+    "footerText": "La biblioteca técnica colaborativa para la nueva generación de arquitectos e ingenieros.",
+    "paywallTitle": "Desbloquea este Detalle Constructivo",
+    "paywallDescription": "Accede a planimetría DWG, especificaciones técnicas completas y soporte experto con nuestro plan Pro.",
+    "paywallButtonText": "Ver Planes de Suscripción"
+  },
+  "details": [
+    {
+      "id": "f-01",
+      "title": "Zapata Corrida de Hormigón Armado",
+      "slug": "zapata-corrida-hormigon-armado",
+      "category": "Fundaciones",
+      "tags": [
+        "Hormigón",
+        "Estructura"
+      ],
+      "description": "Sistema de cimentación superficial utilizado para soportar muros de carga. Consiste en una viga de hormigón armado que distribuye las cargas linealmente al terreno.",
+      "imageUrl": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=800&h=1422&auto=format&fit=crop",
+      "specs": [
+        "Hormigón: HA-25/B/20/IIa",
+        "Acero: B500S",
+        "Recubrimiento mínimo: 50mm",
+        "Profundidad mínima: 80cm"
+      ],
+      "materials": [
+        "Hormigón de limpieza HL-150",
+        "Armadura longitudinal 4Ø12",
+        "Estribos Ø8 c/30cm"
+      ],
+      "drawings": [
+        {
+          "type": "Section",
+          "url": "https://images.unsplash.com/photo-1598971701385-d6c1b3c8290e?q=80&w=800&h=1422&auto=format&fit=crop",
+          "caption": "Sección Transversal A-A"
+        },
+        {
+          "type": "Axonometric",
+          "url": "https://images.unsplash.com/photo-1628131349141-94860b26f562?q=80&w=800&h=1422&auto=format&fit=crop",
+          "caption": "Isometría Constructiva"
+        }
+      ],
+      "author": {
+        "name": "Arq. Elena Foster",
+        "role": "Directora de Estructuras",
+        "team": "Foster Engineering",
+        "avatarUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&h=200&auto=format&fit=crop"
+      },
+      "isVerified": true,
+      "likes": 245,
+      "status": "Published",
+      "accessLevel": "Public",
+      "publishedDate": "2024-10-15"
+    },
+    {
+      "id": "w-01",
+      "title": "Cerramiento de Ladrillo Cara Vista",
+      "slug": "cerramiento-ladrillo-cara-vista",
+      "category": "Mamposterías",
+      "description": "Muro de fachada de doble hoja con cámara de aire y aislamiento térmico. La hoja exterior es de ladrillo cara vista y la interior de ladrillo hueco doble.",
+      "imageUrl": "https://images.unsplash.com/photo-1621262823616-e41c484742d4?q=80&w=800&h=1422&auto=format&fit=crop",
+      "specs": [
+        "Ladrillo: Klinker R > 35 kg/cm²",
+        "Mortero: M-7.5",
+        "Aislamiento: Lana de roca 80mm"
+      ],
+      "materials": [
+        "Ladrillo cara vista hidrofugado",
+        "Llana de acero inoxidable para tendeles",
+        "Aislante rígido"
+      ],
+      "drawings": [],
+      "author": {
+        "name": "Carlos M. Asian",
+        "role": "Arquitecto Técnico Senior",
+        "team": "Grupo Obras",
+        "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&h=200&auto=format&fit=crop"
+      },
+      "isVerified": true,
+      "likes": 189,
+      "status": "Published",
+      "accessLevel": "Public",
+      "publishedDate": "2024-11-02"
+    },
+    {
+      "id": "s-01",
+      "title": "Estructura de Acero - Nudo Rígido",
+      "slug": "estructura-acero-nudo-rigido",
+      "category": "Estructuras",
+      "description": "Detalle de unión soldada entre viga IPE y pilar HEB. Garantiza la transmisión de momentos flectores y esfuerzos cortantes.",
+      "imageUrl": "https://images.unsplash.com/photo-1535967073280-99c92cc0599a?q=80&w=800&h=1422&auto=format&fit=crop",
+      "specs": [
+        "Acero Perfiles: S275JR",
+        "Soldadura: Electrodo básico",
+        "Control: Ensayos no destructivos"
+      ],
+      "materials": [
+        "Perfil IPE-300",
+        "Perfil HEB-240",
+        "Rigidizadores de acero t=10mm"
+      ],
+      "drawings": [],
+      "author": {
+        "name": "Sarah Conner",
+        "role": "Ingeniera de Metal",
+        "team": "Steel Solutions",
+        "avatarUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&h=200&auto=format&fit=crop"
+      },
+      "isVerified": true,
+      "likes": 420,
+      "status": "Published",
+      "accessLevel": "Pro",
+      "publishedDate": "2024-12-05"
+    },
+    {
+      "id": "r-01",
+      "title": "Cubierta Ajardinada Intensiva",
+      "slug": "cubierta-ajardinada-intensiva",
+      "category": "Cubiertas",
+      "subcategory": "Tradicionales",
+      "description": "Sistema de cubierta verde que permite el crecimiento de vegetación arbustiva. Mejora el aislamiento térmico y la gestión de aguas pluviales.",
+      "imageUrl": "https://images.unsplash.com/photo-1632753205775-6e42d765581e?q=80&w=800&h=1422&auto=format&fit=crop",
+      "specs": [
+        "Sustrato: Tierra vegetal mejorada 30cm",
+        "Drenaje: Lámina nodular",
+        "Carga: 450 kg/m²"
+      ],
+      "materials": [
+        "Geotextil separador",
+        "Lámina EPDM",
+        "Vegetación autóctona"
+      ],
+      "drawings": [],
+      "author": {
+        "name": "Studio 4B",
+        "role": "Equipo de Paisajismo",
+        "team": "Green Arch",
+        "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&h=200&auto=format&fit=crop"
+      },
+      "isVerified": false,
+      "likes": 56,
+      "status": "Published",
+      "accessLevel": "Pro",
+      "publishedDate": "2024-09-20"
+    },
+    {
+      "id": "st-01",
+      "title": "Escalera Volada de Hormigón",
+      "slug": "escalera-volada-hormigon",
+      "category": "Escaleras",
+      "description": "Peldaños individuales de hormigón armado empotrados en muro de carga, creando un efecto de ligereza visual sin zanca visible.",
+      "imageUrl": "https://images.unsplash.com/photo-1517173822188-44473d09a068?q=80&w=800&h=1422&auto=format&fit=crop",
+      "specs": [
+        "Empotramiento: 25cm mín.",
+        "Armadura: Doble parrilla",
+        "Hormigón: HA-30 visto"
+      ],
+      "materials": [
+        "Encofrado fenólico",
+        "Anclajes químicos",
+        "Neopreno de apoyo"
+      ],
+      "drawings": [],
+      "author": {
+        "name": "Arq. Mario Bellini",
+        "role": "Diseñador Principal",
+        "avatarUrl": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&h=200&auto=format&fit=crop"
+      },
+      "isVerified": true,
+      "likes": 890,
+      "status": "Published",
+      "accessLevel": "Enterprise",
+      "publishedDate": "2025-01-10"
+    },
+    {
+      "id": "l-01",
+      "title": "Pavimento de Adoquín Granítico",
+      "slug": "pavimento-adoquin-granito",
+      "category": "Solados",
+      "description": "Pavimentación exterior flexible con adoquines de granito sobre cama de arena, permitiendo cierta permeabilidad y movimientos del terreno.",
+      "imageUrl": "https://images.unsplash.com/photo-1519098901909-b1553a1190af?q=80&w=800&h=1422&auto=format&fit=crop",
+      "specs": [
+        "Adoquín: 10x10x10cm",
+        "Cama de arena: 3-5cm",
+        "Base: Zahorra artificial"
+      ],
+      "materials": [
+        "Granito Gris Quintana",
+        "Arena de sílice",
+        "Geotextil"
+      ],
+      "drawings": [],
+      "author": {
+        "name": "Urbana Labs",
+        "role": "Urbanismo",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&h=200&auto=format&fit=crop"
+      },
+      "isVerified": true,
+      "likes": 112,
+      "status": "Published",
+      "accessLevel": "Public",
+      "publishedDate": "2024-08-15"
+    },
+    {
+      "id": "int-01",
+      "title": "Panelado de Madera Acústico",
+      "slug": "panelado-madera-acustico",
+      "category": "Cielorrasos",
+      "description": "Revestimiento interior con listones de madera maciza sobre fondo fonoabsorbente negro. Ideal para auditorios y salas de reuniones.",
+      "imageUrl": "https://images.unsplash.com/photo-1505063854216-015d861d8712?q=80&w=800&h=1422&auto=format&fit=crop",
+      "specs": [
+        "Madera: Roble Europeo",
+        "Absorción: a=0.85",
+        "Montaje: Rastrelado oculto"
+      ],
+      "materials": [
+        "Fieltro PET reciclado 9mm",
+        "Listón Roble 30x30mm",
+        "Clavos sin cabeza"
+      ],
+      "drawings": [],
+      "author": {
+        "name": "Arq. Elena Foster",
+        "role": "Directora de Estructuras",
+        "team": "Foster Engineering",
+        "avatarUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&h=200&auto=format&fit=crop"
+      },
+      "isVerified": true,
+      "likes": 302,
+      "status": "Published",
+      "accessLevel": "Pro",
+      "publishedDate": "2024-12-20"
+    },
+    {
+      "id": "mep-01",
+      "title": "Desagüe - Canaleta Industrial",
+      "slug": "desague-canaleta-industrial",
+      "category": "Instalaciones",
+      "subcategory": "Cloacales",
+      "description": "Canaleta de desagüe ejecutada in situ con hormigón armado, diseñada para cargas pesadas en playones industriales.",
+      "imageUrl": "https://images.unsplash.com/photo-1590250646678-0051187d90d8?q=80&w=800&h=1422&auto=format&fit=crop",
+      "specs": [
+        "Hormigón: HA-30",
+        "Pendiente: 3%",
+        "Pasadores: Acero Ø 20mm"
+      ],
+      "materials": [
+        "Rejilla metálica",
+        "Sellador elástico",
+        "Film polietileno"
+      ],
+      "drawings": [],
+      "author": {
+        "name": "Ing. Roberto Molinari",
+        "role": "Ingeniero Civil",
+        "team": "Infraestructuras S.A.",
+        "avatarUrl": "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&h=200&auto=format&fit=crop"
+      },
+      "isVerified": true,
+      "likes": 15,
+      "status": "Published",
+      "accessLevel": "Public",
+      "publishedDate": "2024-07-30"
+    },
+    {
+      "id": "f-02",
+      "title": "Pilotes Prefabricados Hincados",
+      "slug": "pilotes-prefabricados",
+      "category": "Fundaciones",
+      "description": "Cimentación profunda mediante pilotes de hormigón prefabricado hincados por percusión. Ideal para terrenos blandos.",
+      "imageUrl": "https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?q=80&w=800&h=1422&auto=format&fit=crop",
+      "specs": [
+        "Hormigón: HA-45",
+        "Armadura activa",
+        "Sección: 35x35cm"
+      ],
+      "materials": [
+        "Pilote prefabricado",
+        "Junta de empalme metálica"
+      ],
+      "drawings": [],
+      "author": {
+        "name": "Dr. Alan Grant",
+        "role": "Geotécnico",
+        "avatarUrl": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&auto=format&fit=crop"
+      },
+      "isVerified": true,
+      "likes": 310,
+      "status": "Published",
+      "accessLevel": "Pro",
+      "publishedDate": "2025-01-15"
+    },
+    {
+      "id": "w-02",
+      "title": "Fachada Ventilada Cerámica",
+      "slug": "fachada-ventilada-ceramica",
+      "category": "Mamposterías",
+      "description": "Sistema de cerramiento exterior con estructura auxiliar de aluminio y placas cerámicas, optimizando el comportamiento térmico.",
+      "imageUrl": "https://images.unsplash.com/photo-1486718448742-163732cd1544?q=80&w=800&h=1422&auto=format&fit=crop",
+      "specs": [
+        "Perfilería: Aluminio 6063",
+        "Aislamiento: 100mm",
+        "Junta: Abierta 5mm"
+      ],
+      "materials": [
+        "Placa cerámica extrusionada",
+        "Ménsulas de sustentación",
+        "Lana mineral"
+      ],
+      "drawings": [],
+      "author": {
+        "name": "Arq. Sofia Lopez",
+        "role": "Fachadista",
+        "avatarUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop"
+      },
+      "isVerified": true,
+      "likes": 520,
+      "status": "Published",
+      "accessLevel": "Public",
+      "publishedDate": "2025-01-12"
+    },
+    {
+      "id": "r-02",
+      "title": "Cubierta Invertida de Grava",
+      "slug": "cubierta-invertida-grava",
+      "category": "Cubiertas",
+      "subcategory": "Tradicionales",
+      "description": "Cubierta plana donde el aislamiento térmico se coloca sobre la impermeabilización, protegido por una capa de grava.",
+      "imageUrl": "https://images.unsplash.com/photo-1635327293529-6c39f04642d9?q=80&w=800&h=1422&auto=format&fit=crop",
+      "specs": [
+        "Pendiente: 1-5%",
+        "Aislamiento: XPS 80mm",
+        "Grava: Canto rodado 16/32"
+      ],
+      "materials": [
+        "Lámina asfáltica bicapa",
+        "Geotextil antipunzonamiento",
+        "Poliestireno extruido"
+      ],
+      "drawings": [],
+      "author": {
+        "name": "Construcciones Norte",
+        "role": "Constructora",
+        "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop"
+      },
+      "isVerified": true,
+      "likes": 98,
+      "status": "Published",
+      "accessLevel": "Public",
+      "publishedDate": "2024-11-20"
+    },
+    {
+      "id": "fl-01",
+      "title": "Forjado Reticular de Casetón Recuperable",
+      "slug": "forjado-reticular",
+      "category": "Entrepisos",
+      "subcategory": "Cementícias",
+      "description": "Losa de hormigón armado aligerada mediante casetones recuperables, permitiendo grandes luces y flexibilidad en distribución.",
+      "imageUrl": "https://images.unsplash.com/photo-1518709328227-2c130325d739?q=80&w=800&h=1422&auto=format&fit=crop",
+      "specs": [
+        "Canto: 30+5cm",
+        "Nervio: 12cm",
+        "Intereje: 80cm"
+      ],
+      "materials": [
+        "Hormigón HA-30",
+        "Mallazo reparto",
+        "Casetones PVC"
+      ],
+      "drawings": [],
+      "author": {
+        "name": "Arq. Elena Foster",
+        "role": "Directora Estructuras",
+        "team": "Foster Engineering",
+        "avatarUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop"
+      },
+      "isVerified": true,
+      "likes": 450,
+      "status": "Published",
+      "accessLevel": "Enterprise",
+      "publishedDate": "2024-10-05"
+    },
+    {
+      "id": "st-02",
+      "title": "Escalera Metálica Helicoidal",
+      "slug": "escalera-metalica-helicoidal",
+      "category": "Escaleras",
+      "description": "Escalera de caracol con eje central de acero y peldaños en chapa plegada. Diseño industrial y ligero.",
+      "imageUrl": "https://images.unsplash.com/photo-1551524559-8af4e6624178?q=80&w=800&h=1422&auto=format&fit=crop",
+      "specs": [
+        "Eje: Tubo Ø200mm",
+        "Peldaño: Chapa lagrimada 5mm",
+        "Barandilla: Varilla maciza"
+      ],
+      "materials": [
+        "Acero S275JR",
+        "Esmalte poliuretano"
+      ],
+      "drawings": [],
+      "author": {
+        "name": "Sarah Conner",
+        "role": "Ingeniera de Metal",
+        "team": "Steel Solutions",
+        "avatarUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop"
+      },
+      "isVerified": true,
+      "likes": 600,
+      "status": "Published",
+      "accessLevel": "Public",
+      "publishedDate": "2024-12-12"
+    },
+    {
+      "id": "mep-02",
+      "title": "Suelo Radiante Refrescante",
+      "slug": "suelo-radiante",
+      "category": "Instalaciones",
+      "subcategory": "AA",
+      "description": "Sistema de climatización invisible integrado en el pavimento mediante tuberías de agua a baja temperatura.",
+      "imageUrl": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&h=1422&auto=format&fit=crop",
+      "specs": [
+        "Tubo: PEX-a con barrera antioxígeno",
+        "Panel: Tetones EPS",
+        "Mortero: Autonivelante aditivado"
+      ],
+      "materials": [
+        "Tubería polietileno reticulado",
+        "Banda perimetral",
+        "Colectores acero inox"
+      ],
+      "drawings": [],
+      "author": {
+        "name": "Ing. Roberto Molinari",
+        "role": "Ingeniero Civil",
+        "avatarUrl": "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop"
+      },
+      "isVerified": true,
+      "likes": 330,
+      "status": "Published",
+      "accessLevel": "Pro",
+      "publishedDate": "2025-01-05"
+    }
+  ],
+  "clients": [
+    {
+      "id": "c-01",
+      "name": "Estudio Alpha",
+      "email": "contacto@alpha.com",
+      "avatarUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=100&auto=format&fit=crop",
+      "plan": "Pro",
+      "status": "Active",
+      "subscriptionStart": "2023-05-12",
+      "subscriptionEnd": "2024-05-12",
+      "monthlyFee": 29,
+      "profession": "Estudio de Arquitectura",
+      "bio": "Especialistas en vivienda unifamiliar sostenible.",
+      "interests": [
+        "Sostenibilidad",
+        "Madera",
+        "Eficiencia"
+      ]
+    },
+    {
+      "id": "c-02",
+      "name": "Juan Pérez Arq",
+      "email": "juan@perezarq.com",
+      "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=100&auto=format&fit=crop",
+      "plan": "Basic",
+      "status": "Expired",
+      "subscriptionStart": "2022-01-15",
+      "subscriptionEnd": "2023-01-15",
+      "monthlyFee": 9,
+      "profession": "Arquitecto Independiente",
+      "bio": "Diseño minimalista y funcional.",
+      "interests": [
+        "Hormigón",
+        "Interiorismo"
+      ]
+    }
+  ],
+  "reports": [
+    {
+      "id": "r-001",
+      "detailId": "f-01",
+      "detailTitle": "Zapata Corrida",
+      "description": "La profundidad mínima en zona heladiza suele ser mayor en normativa local.",
+      "status": "Pending",
+      "submittedAt": "2023-10-25"
+    },
+    {
+      "id": "r-002",
+      "detailId": "st-01",
+      "detailTitle": "Escalera Volada",
+      "description": "Falta especificar el tipo de anclaje químico recomendado.",
+      "status": "Resolved",
+      "submittedAt": "2023-10-20"
+    }
+  ],
+  "comments": [
+    {
+      "id": "cm-1",
+      "detailId": "f-01",
+      "authorName": "Martín López",
+      "authorAvatar": "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=100&auto=format&fit=crop",
+      "text": "¿El recubrimiento de 50mm es suficiente para ambientes marinos? Yo suelo especificar 70mm.",
+      "timestamp": "Hace 2 días",
+      "role": "Ingeniero"
+    }
+  ]
+}
