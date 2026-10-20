@@ -13,7 +13,16 @@ import AuthorsPage from "./components/AuthorsPage";
 import LegalPage from "./components/LegalPage";
 import AuthPage from "./components/AuthPage";
 import UserDashboard from "./components/UserDashboard";
-import { AuthApi, toClientUser } from "./services/api";
+import {
+  AuthApi,
+  SiteApi,
+  DetailsApi,
+  toClientUser,
+  toConfig,
+  toCategory,
+  toPlan,
+  toDetail,
+} from "./services/api";
 
 import { PersistenceService } from "./services/persistence";
 import {
@@ -25,7 +34,6 @@ import {
   SiteConfig,
   AccessLevel,
   PricingPlan,
-  NewsletterSubscriber,
   Tag,
   CategoryDef,
 } from "./types";
@@ -66,7 +74,6 @@ function App() {
     PersistenceService.getConfig(),
   );
   const [plans, setPlans] = useState<PricingPlan[]>([]);
-  const [subscribers, setSubscribers] = useState<NewsletterSubscriber[]>([]);
   const [categories, setCategories] = useState<CategoryDef[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
 
@@ -83,8 +90,10 @@ function App() {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [simulatedTier, setSimulatedTier] = useState<AccessLevel>("Public");
   const [showPaywall, setShowPaywall] = useState(false);
+  const [paywallReason, setPaywallReason] = useState<
+    "login" | "plan" | "quota"
+  >("plan");
   const [sortBy, setSortBy] = useState<"popular" | "date">("popular");
 
   const [currentUser, setCurrentUser] = useState<ClientUser | null>(null);
@@ -94,13 +103,18 @@ function App() {
   const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
-    setDetails(PersistenceService.getDetails());
     setClients(PersistenceService.getClients());
     setReports(PersistenceService.getReports());
     setComments(PersistenceService.getComments());
-    setPlans(PersistenceService.getPlans());
-    setSubscribers(PersistenceService.getSubscribers());
-    setCategories(PersistenceService.getCategories());
+    SiteApi.categories()
+      .then((c) => setCategories(c.map(toCategory)))
+      .catch(console.error);
+    SiteApi.plans()
+      .then((p) => setPlans(p.map(toPlan)))
+      .catch(console.error);
+    SiteApi.settings()
+      .then((s) => setConfig(toConfig(s)))
+      .catch(console.error);
     setTags(PersistenceService.getTags());
     setFavoriteIds(PersistenceService.getFavorites());
   }, []);
@@ -122,6 +136,13 @@ function App() {
       .catch(() => {})
       .finally(() => setAuthLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (authLoading) return;
+    DetailsApi.list()
+      .then((r) => setDetails(r.data.map(toDetail)))
+      .catch(console.error);
+  }, [authLoading, currentUser?.id]);
 
   const handleToggleFavorite = (detailId: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -204,19 +225,26 @@ function App() {
     setView("HOME");
   };
 
-  const handleOpenDetail = (detail: ConstructionDetail) => {
-    const userTier = currentUser
-      ? currentUser.plan === "Basic"
-        ? "Public"
-        : "Pro"
-      : simulatedTier;
-    if (detail.accessLevel !== "Public" && userTier === "Public") {
-      setSelectedDetail(detail);
-      setShowPaywall(true);
-      return;
+  const handleOpenDetail = async (detail: ConstructionDetail) => {
+    try {
+      const res = await DetailsApi.show(detail.slug!);
+      setSelectedDetail(toDetail(res));
+
+      if (!res.access.allowed) {
+        setPaywallReason(res.access.reason ?? "plan");
+        setShowPaywall(true);
+        return;
+      }
+
+      setView("DETAIL");
+      if (currentUser) {
+        AuthApi.me()
+          .then((u) => setCurrentUser(toClientUser(u)))
+          .catch(() => {});
+      }
+    } catch {
+      alert("No se pudo abrir el detalle. Probá de nuevo.");
     }
-    setSelectedDetail(detail);
-    setView("DETAIL");
   };
 
   const handleOpenProfile = (author: Author) => {
@@ -228,18 +256,6 @@ function App() {
     setView("HOME");
     setSelectedDetail(null);
     setSelectedAuthor(null);
-  };
-
-  const handleSubscribe = () => {
-    setShowPaywall(false);
-    if (currentUser) {
-      setCurrentUser({ ...currentUser, plan: "Pro" });
-      alert("¡Plan actualizado a PRO!");
-    } else {
-      setSimulatedTier("Pro");
-      alert("¡Suscripción Pro activada exitosamente! (Simulación)");
-    }
-    if (selectedDetail) setView("DETAIL");
   };
 
   const handleExploreNew = () => {
@@ -303,7 +319,7 @@ function App() {
       text,
       timestamp: "Ahora mismo",
       role: currentUser
-        ? currentUser.plan === "Basic"
+        ? currentUser.plan === "Free"
           ? "Usuario"
           : currentUser.plan
         : undefined,
@@ -323,16 +339,12 @@ function App() {
     PersistenceService.savePlans(newPlans);
   };
 
-  const handleSubscribeNewsletter = (email: string) => {
-    const newSub: NewsletterSubscriber = {
-      id: `s-${Date.now()}`,
-      email,
-      subscribedAt: new Date().toISOString().split("T")[0],
-      status: "Subscribed",
-    };
-    const updated = [...subscribers, newSub];
-    setSubscribers(updated);
-    PersistenceService.saveSubscribers(updated);
+  const handleSubscribe = () => {
+    if (!currentUser) {
+      setView("AUTH");
+      return;
+    }
+    alert("El pago con Mercado Pago y PayPal se habilita en el próximo paso.");
   };
 
   const handleSaveCategories = (cats: string[]) => {
@@ -384,7 +396,7 @@ function App() {
       id: "guest",
       name: "Usuario Invitado",
       email: "invitado@endetalle.io",
-      plan: simulatedTier === "Pro" ? "Pro" : "Basic",
+      plan: "Free",
       status: "Active",
       subscriptionStart: new Date().toISOString().split("T")[0],
       subscriptionEnd: "2026-12-31",
@@ -393,7 +405,7 @@ function App() {
       profession: "Profesional de la Construcción",
       favoriteDetailIds: favoriteIds,
     };
-  }, [currentUser, simulatedTier, favoriteIds]);
+  }, [currentUser, favoriteIds]);
 
   return (
     <div
@@ -415,9 +427,15 @@ function App() {
       {showPaywall && selectedDetail && (
         <Paywall
           detail={selectedDetail}
+          reason={paywallReason}
+          config={config}
           onSubscribe={() => {
             setShowPaywall(false);
             setView("SUBSCRIPTION");
+          }}
+          onLogin={() => {
+            setShowPaywall(false);
+            setView("AUTH");
           }}
           onClose={() => setShowPaywall(false)}
         />
@@ -459,10 +477,6 @@ function App() {
             setView("ADMIN");
             setIsMobileMenuOpen(false);
           }}
-          simulatedTier={simulatedTier}
-          onToggleTier={() =>
-            setSimulatedTier((prev) => (prev === "Public" ? "Pro" : "Public"))
-          }
           onViewPlans={() => setView("SUBSCRIPTION")}
           onOpenAuth={() => setView("AUTH")}
           currentUser={currentUser}
@@ -643,9 +657,7 @@ function App() {
 
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 pointer-events-none">
                         <div className="bg-primary-400 text-slate-900 rounded-full p-4 transform scale-50 group-hover:scale-100 transition-transform duration-300 shadow-2xl">
-                          {detail.accessLevel === "Pro" &&
-                          simulatedTier === "Public" &&
-                          !currentUser ? (
+                          {detail.locked ? (
                             <Lock size={24} />
                           ) : (
                             <ArrowUpRight size={28} strokeWidth={2.5} />
@@ -662,9 +674,10 @@ function App() {
                             {detail.description}
                           </p>
                           <div className="flex gap-2">
-                            {detail.accessLevel === "Pro" && (
+                            {detail.requiredPlanName && (
                               <span className="bg-slate-800 text-primary-400 text-[10px] font-bold px-2 py-1 rounded border border-primary-400/30 flex items-center gap-1">
-                                <Lock size={10} /> PRO
+                                <Lock size={10} />{" "}
+                                {detail.requiredPlanName.toUpperCase()}
                               </span>
                             )}
                           </div>
@@ -756,11 +769,7 @@ function App() {
               />
             )}
           </div>
-          <Footer
-            config={config}
-            onNavigate={handleNavigate}
-            onSubscribeNewsletter={handleSubscribeNewsletter}
-          />
+          <Footer config={config} onNavigate={handleNavigate} />
         </div>
       </main>
 
@@ -771,7 +780,6 @@ function App() {
           reports={reports}
           config={config}
           plans={plans}
-          subscribers={subscribers}
           categories={categories.map((c) => c.name)}
           tags={tags}
           onAdd={handleAddDetail}

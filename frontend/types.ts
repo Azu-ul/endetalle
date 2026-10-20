@@ -1,4 +1,3 @@
-
 export interface Author {
   name: string;
   avatarUrl: string;
@@ -11,8 +10,8 @@ export interface ClientUser {
   name: string;
   email: string;
   avatarUrl: string;
-  plan: 'Pro' | 'Basic' | 'Enterprise';
-  status: 'Active' | 'Expired' | 'Trial';
+  plan: string;
+  status: "Active" | "Expired" | "Trial";
   subscriptionStart: string;
   subscriptionEnd: string;
   monthlyFee: number;
@@ -23,6 +22,9 @@ export interface ClientUser {
   interests?: string[];
   coverUrl?: string;
   favoriteDetailIds?: string[];
+  quotaUsed?: number;
+  quotaLimit?: number | null;
+  daysLeft?: number | null;
 }
 
 export interface ErrorReport {
@@ -30,7 +32,7 @@ export interface ErrorReport {
   detailId: string;
   detailTitle: string;
   description: string;
-  status: 'Pending' | 'Resolved';
+  status: "Pending" | "Resolved";
   submittedAt: string;
 }
 
@@ -79,7 +81,7 @@ export interface PricingPlan {
   id: string;
   name: string;
   price: number;
-  interval: 'mo' | 'yr';
+  interval: "mo" | "yr";
   description: string;
   features: string[];
   isRecommended?: boolean;
@@ -90,7 +92,7 @@ export interface NewsletterSubscriber {
   id: string;
   email: string;
   subscribedAt: string;
-  status: 'Subscribed' | 'Unsubscribed';
+  status: "Subscribed" | "Unsubscribed";
 }
 
 export interface Tag {
@@ -106,8 +108,8 @@ export interface CategoryDef {
   subcategories: string[];
 }
 
-export type PublicationStatus = 'Published' | 'Draft' | 'Archived';
-export type AccessLevel = 'Public' | 'Pro' | 'Enterprise';
+export type PublicationStatus = "Published" | "Draft" | "Archived";
+export type AccessLevel = "Public" | "Pro" | "Enterprise";
 
 export interface ConstructionDetail {
   id: string;
@@ -120,7 +122,7 @@ export interface ConstructionDetail {
   specs: string[];
   materials: string[];
   drawings: {
-    type: 'Section' | 'Plan' | 'Elevation' | 'Axonometric' | 'Detail';
+    type: "Section" | "Plan" | "Elevation" | "Axonometric" | "Detail";
     url: string;
     caption: string;
   }[];
@@ -133,6 +135,8 @@ export interface ConstructionDetail {
   slug?: string;
   seoTitle?: string;
   metaDescription?: string;
+  locked?: boolean;
+  requiredPlanName?: string;
 }
 
 export interface LiveStat {
@@ -143,7 +147,7 @@ export interface LiveStat {
 }
 
 export interface ChatMessage {
-  role: 'user' | 'model';
+  role: "user" | "model";
   text: string;
   timestamp: number;
 }

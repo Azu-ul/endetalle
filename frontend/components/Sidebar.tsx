@@ -32,8 +32,6 @@ interface SidebarProps {
   isDarkMode: boolean;
   toggleDarkMode: () => void;
   onOpenAdmin: () => void;
-  simulatedTier: AccessLevel;
-  onToggleTier: () => void;
   onViewPlans: () => void;
   onOpenAuth: () => void;
   currentUser: any;
@@ -52,8 +50,6 @@ const Sidebar: React.FC<SidebarProps> = ({
   isDarkMode,
   toggleDarkMode,
   onOpenAdmin,
-  simulatedTier,
-  onToggleTier,
   onViewPlans,
   onOpenAuth,
   currentUser,
@@ -236,24 +232,6 @@ const Sidebar: React.FC<SidebarProps> = ({
       </nav>
 
       <div className="p-4 border-t border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg/50 shrink-0 space-y-3">
-        {/* Tier Simulator - For Testing */}
-        <div className="flex items-center gap-2 p-3 bg-white dark:bg-dark-card rounded-lg border border-slate-200 dark:border-dark-border">
-          <User size={16} className="text-slate-400" />
-          <div className="flex-1 text-xs font-bold dark:text-white">
-            Test:{" "}
-            <span className="text-primary-600 dark:text-primary-400">
-              {simulatedTier}
-            </span>
-          </div>
-          <button
-            onClick={onToggleTier}
-            className={`w-10 h-5 rounded-full p-1 transition-colors ${simulatedTier === "Pro" ? "bg-primary-400" : "bg-slate-300"}`}
-          >
-            <div
-              className={`w-3 h-3 bg-white rounded-full shadow transition-transform ${simulatedTier === "Pro" ? "translate-x-5" : "translate-x-0"}`}
-            />
-          </button>
-        </div>
 
         <button
           onClick={onOpenAdmin}

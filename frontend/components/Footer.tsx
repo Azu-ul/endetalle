@@ -1,27 +1,14 @@
-
-import React, { useState } from 'react';
-import { Heart, Twitter, Github, Linkedin, Mail, Instagram, Check } from 'lucide-react';
+import React from 'react';
+import { Heart, Twitter, Github, Linkedin, Mail, Instagram } from 'lucide-react';
 import { SiteConfig } from '../types';
 
 interface FooterProps {
   config?: SiteConfig;
   onNavigate: (view: 'CONTACT' | 'AUTHORS' | 'LEGAL_TERMS' | 'LEGAL_PRIVACY' | 'HOME') => void;
-  onSubscribeNewsletter: (email: string) => void;
 }
 
-const Footer: React.FC<FooterProps> = ({ config, onNavigate, onSubscribeNewsletter }) => {
+const Footer: React.FC<FooterProps> = ({ config, onNavigate }) => {
   const links = config?.socialLinks || {};
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = () => {
-      if (email && email.includes('@')) {
-          onSubscribeNewsletter(email);
-          setSubscribed(true);
-          setEmail('');
-          setTimeout(() => setSubscribed(false), 3000);
-      }
-  };
 
   return (
     <footer className="mt-20 border-t border-slate-200 dark:border-dark-border pt-16 pb-10 bg-slate-50/50 dark:bg-dark-bg/50">
@@ -35,25 +22,6 @@ const Footer: React.FC<FooterProps> = ({ config, onNavigate, onSubscribeNewslett
              <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs leading-relaxed">
                La biblioteca técnica colaborativa para la nueva generación de arquitectos e ingenieros. Documentación verificada y detalles constructivos de alta precisión.
              </p>
-             {/* Newsletter */}
-             <div className="pt-2">
-                 <h5 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-2">Newsletter</h5>
-                 <div className="flex gap-2">
-                     <input 
-                        type="email" 
-                        placeholder="Tu email..." 
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border px-3 py-2 rounded-lg text-sm w-full focus:outline-none focus:border-primary-400 dark:text-white" 
-                     />
-                     <button 
-                        onClick={handleSubscribe}
-                        className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${subscribed ? 'bg-green-500 text-white' : 'bg-slate-900 dark:bg-white text-white dark:text-slate-900'}`}
-                     >
-                        {subscribed ? <Check size={16} /> : 'Suscribir'}
-                     </button>
-                 </div>
-             </div>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 flex-1">
