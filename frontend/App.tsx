@@ -3,7 +3,6 @@ import React, { useState, useMemo, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import DetailView from './components/DetailView';
 import UserProfile from './components/UserProfile';
-import AIChat from './components/AIChat';
 import Footer from './components/Footer';
 import AdminPanel from './components/AdminPanel';
 import SEOHead from './components/SEOHead';
@@ -577,8 +576,6 @@ function App() {
           onClose={() => setView('HOME')}
         />
       )}
-
-      <AIChat currentDetail={selectedDetail} />
     </div>
   );
 }
