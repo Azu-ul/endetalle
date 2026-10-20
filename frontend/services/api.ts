@@ -134,6 +134,7 @@ export function toClientUser(u: ApiUser): ClientUser {
     quotaUsed: u.quota.used,
     quotaLimit: u.quota.limit,
     daysLeft: u.subscription?.days_left ?? null,
+    roles: u.roles,
   };
 }
 
@@ -163,7 +164,7 @@ export interface ApiDetailCard {
 }
 
 export interface ApiDetailFull extends ApiDetailCard {
-  access: { allowed: boolean; reason: 'login' | 'plan' | 'quota' | null };
+  access: { allowed: boolean; reason: "login" | "plan" | "quota" | null };
   specs?: string[];
   materials?: string[];
   images?: { type: string; url: string; caption: string | null }[];
@@ -192,14 +193,15 @@ export interface ApiPlan {
 }
 
 export const SiteApi = {
-  settings: () => api<Record<string, any>>('/settings'),
-  categories: () => api<ApiCategory[]>('/categories'),
-  plans: () => api<ApiPlan[]>('/plans'),
+  settings: () => api<Record<string, any>>("/settings"),
+  categories: () => api<ApiCategory[]>("/categories"),
+  plans: () => api<ApiPlan[]>("/plans"),
 };
 
 export const DetailsApi = {
-  list: () => api<{ data: ApiDetailCard[] }>('/details?per_page=100'),
-  show: (slug: string) => api<ApiDetailFull>(`/details/${encodeURIComponent(slug)}`),
+  list: () => api<{ data: ApiDetailCard[] }>("/details?per_page=100"),
+  show: (slug: string) =>
+    api<ApiDetailFull>(`/details/${encodeURIComponent(slug)}`),
 };
 
 export function toDetail(d: ApiDetailCard | ApiDetailFull): ConstructionDetail {
@@ -208,29 +210,29 @@ export function toDetail(d: ApiDetailCard | ApiDetailFull): ConstructionDetail {
     id: String(d.id),
     slug: d.slug,
     title: d.title,
-    category: d.category?.name ?? '',
+    category: d.category?.name ?? "",
     subcategory: d.subcategory?.name,
     tags: d.tags,
     description: d.description,
-    imageUrl: d.cover_url ?? '',
+    imageUrl: d.cover_url ?? "",
     specs: full.specs ?? [],
     materials: full.materials ?? [],
     drawings: (full.images ?? []).map((i) => ({
       type: (i.type.charAt(0).toUpperCase() + i.type.slice(1)) as any,
       url: i.url,
-      caption: i.caption ?? '',
+      caption: i.caption ?? "",
     })),
     author: {
-      name: d.author?.name ?? 'enDetalle',
+      name: d.author?.name ?? "enDetalle",
       avatarUrl: d.author?.avatar_url ?? DEFAULT_AVATAR,
-      role: d.author?.profession ?? '',
+      role: d.author?.profession ?? "",
       team: d.author?.company ?? undefined,
     },
     isVerified: d.is_verified,
     likes: d.votes_count,
-    status: 'Published',
-    accessLevel: d.required_plan ? 'Pro' : 'Public',
-    publishedDate: d.published_at ?? '',
+    status: "Published",
+    accessLevel: d.required_plan ? "Pro" : "Public",
+    publishedDate: d.published_at ?? "",
     seoTitle: full.seo_title ?? undefined,
     metaDescription: full.meta_description ?? undefined,
     locked: d.locked,
@@ -243,7 +245,7 @@ export function toCategory(c: ApiCategory): CategoryDef {
   return {
     id: c.slug,
     name: c.name,
-    imageUrl: c.image_url ?? '',
+    imageUrl: c.image_url ?? "",
     subcategories: c.subcategories.map((s) => s.name),
   };
 }
@@ -253,8 +255,8 @@ export function toPlan(p: ApiPlan): PricingPlan {
     id: String(p.id),
     name: p.name,
     price: p.price,
-    interval: p.interval === 'year' ? 'yr' : 'mo',
-    description: p.description ?? '',
+    interval: p.interval === "year" ? "yr" : "mo",
+    description: p.description ?? "",
     features: p.features,
     isRecommended: p.is_recommended,
     highlightColor: p.highlight_color ?? undefined,
@@ -263,10 +265,11 @@ export function toPlan(p: ApiPlan): PricingPlan {
 
 export function toConfig(s: Record<string, any>): SiteConfig {
   return {
-    siteTitle: s.site_title ?? 'enDetalle',
-    headerImageUrl: s.header_image_url ?? '',
+    siteTitle: s.site_title ?? "enDetalle",
+    headerImageUrl: s.header_image_url ?? "",
     maintenanceMode: !!s.maintenance_mode,
     socialLinks: s.social_links ?? {},
+    address: s.address,
     termsContent: s.terms_content,
     privacyContent: s.privacy_content,
     homeTitle: s.home_title,

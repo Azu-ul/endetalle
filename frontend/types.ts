@@ -25,6 +25,7 @@ export interface ClientUser {
   quotaUsed?: number;
   quotaLimit?: number | null;
   daysLeft?: number | null;
+  roles?: string[];
 }
 
 export interface ErrorReport {
@@ -65,6 +66,7 @@ export interface SiteConfig {
     linkedin?: string;
     instagram?: string;
   };
+  address?: string;
   termsContent?: string;
   privacyContent?: string;
   // Editable Texts

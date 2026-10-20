@@ -35,6 +35,7 @@ interface SidebarProps {
   onViewPlans: () => void;
   onOpenAuth: () => void;
   currentUser: any;
+  isSuperadmin?: boolean;
   authLoading?: boolean;
   onOpenDashboard: () => void;
   savedCount?: number;
@@ -53,6 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   onViewPlans,
   onOpenAuth,
   currentUser,
+  isSuperadmin = false,
   authLoading = false,
   onOpenDashboard,
   savedCount = 0,
@@ -141,6 +143,17 @@ const Sidebar: React.FC<SidebarProps> = ({
               </span>
               <span className="text-[10px] text-primary-400 uppercase font-bold">
                 {currentUser.plan}
+                {currentUser.quotaLimit != null && (
+                  <span className="block text-[10px] text-slate-400 mt-0.5">
+                    {currentUser.quotaUsed ?? 0} de {currentUser.quotaLimit}{" "}
+                    vistos ·{" "}
+                    {Math.max(
+                      0,
+                      currentUser.quotaLimit - (currentUser.quotaUsed ?? 0),
+                    )}{" "}
+                    restantes
+                  </span>
+                )}
               </span>
             </div>
           </button>
@@ -232,14 +245,15 @@ const Sidebar: React.FC<SidebarProps> = ({
       </nav>
 
       <div className="p-4 border-t border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg/50 shrink-0 space-y-3">
-
-        <button
-          onClick={onOpenAdmin}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-dark-surface transition-colors text-sm font-medium"
-        >
-          <Settings size={18} />
-          <span>Panel Admin</span>
-        </button>
+        {isSuperadmin && (
+          <button
+            onClick={onOpenAdmin}
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-dark-surface transition-colors text-sm font-medium"
+          >
+            <Settings size={18} />
+            <span>Panel Admin</span>
+          </button>
+        )}
         <button
           onClick={toggleDarkMode}
           className="w-full flex items-center justify-center gap-2 p-2 rounded-lg bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-dark-surface transition-colors text-sm font-medium shadow-sm"

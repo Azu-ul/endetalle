@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import Sidebar from "./components/Sidebar";
 import DetailView from "./components/DetailView";
 import UserProfile from "./components/UserProfile";
@@ -101,6 +101,8 @@ function App() {
   const [favoriteToast, setFavoriteToast] = useState<string | null>(null);
 
   const [authLoading, setAuthLoading] = useState(true);
+  const mainRef = useRef<HTMLElement>(null);
+  const isSuperadmin = currentUser?.roles?.includes("superadmin") ?? false;
 
   useEffect(() => {
     setClients(PersistenceService.getClients());
@@ -122,6 +124,17 @@ function App() {
   useEffect(() => {
     setFavoriteIds(PersistenceService.getFavorites(currentUser?.id));
   }, [currentUser]);
+
+  // Al cambiar de pantalla, detalle, autor o categoría, volver al inicio.
+  useEffect(() => {
+    mainRef.current?.scrollTo({ top: 0, behavior: "instant" });
+  }, [
+    view,
+    selectedDetail?.id,
+    selectedAuthor?.name,
+    selectedCategory,
+    selectedSubcategory,
+  ]);
 
   useEffect(() => {
     if (favoriteToast) {
@@ -368,24 +381,6 @@ function App() {
     }
   };
 
-  if (config.maintenanceMode && view !== "ADMIN") {
-    return (
-      <div className="h-screen w-full flex flex-col items-center justify-center bg-slate-900 text-white text-center p-4">
-        <SEOHead title="Mantenimiento | enDetalle" />
-        <ShieldAlert size={64} className="text-primary-400 mb-6" />
-        <h1 className="text-4xl font-bold mb-4">
-          {config.siteTitle} en Mantenimiento
-        </h1>
-        <button
-          onClick={() => setView("ADMIN")}
-          className="mt-8 text-sm text-slate-600 hover:text-white underline"
-        >
-          Acceso Admin
-        </button>
-      </div>
-    );
-  }
-
   const savedDetails = useMemo(() => {
     return details.filter((d) => favoriteIds.includes(d.id));
   }, [details, favoriteIds]);
@@ -406,7 +401,26 @@ function App() {
       favoriteDetailIds: favoriteIds,
     };
   }, [currentUser, favoriteIds]);
-
+  if (config.maintenanceMode && !isSuperadmin) {
+    if (view === "AUTH") {
+      return <AuthPage onLogin={handleLogin} onClose={() => setView("HOME")} />;
+    }
+    return (
+      <div className="h-screen w-full flex flex-col items-center justify-center bg-slate-900 text-white text-center p-4">
+        <SEOHead title="Mantenimiento | enDetalle" />
+        <ShieldAlert size={64} className="text-primary-400 mb-6" />
+        <h1 className="text-4xl font-bold mb-4">
+          {config.siteTitle} en Mantenimiento
+        </h1>
+        <button
+          onClick={() => setView("AUTH")}
+          className="mt-8 text-sm text-slate-600 hover:text-white underline"
+        >
+          Acceso Admin
+        </button>
+      </div>
+    );
+  }
   return (
     <div
       className={`flex h-screen w-full font-sans overflow-hidden transition-colors duration-300 ${isDarkMode ? "bg-dark-bg text-slate-100" : "bg-slate-50 text-slate-800"}`}
@@ -480,6 +494,7 @@ function App() {
           onViewPlans={() => setView("SUBSCRIPTION")}
           onOpenAuth={() => setView("AUTH")}
           currentUser={currentUser}
+          isSuperadmin={isSuperadmin}
           authLoading={authLoading}
           onOpenDashboard={() => setView("USER_DASHBOARD")}
           savedCount={favoriteIds.length}
@@ -490,7 +505,10 @@ function App() {
         />
       </div>
 
-      <main className="flex-1 h-full overflow-y-auto relative scroll-smooth">
+      <main
+        ref={mainRef}
+        className="flex-1 h-full overflow-y-auto relative scroll-smooth"
+      >
         <div className="p-6 md:p-10 min-h-screen pb-0 flex flex-col">
           <div className="flex-1">
             {view === "HOME" && (
@@ -504,7 +522,7 @@ function App() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent flex flex-col justify-center px-12 md:px-20">
                       <span className="text-primary-400 font-bold tracking-widest uppercase mb-4 text-sm animate-in slide-in-from-left-4 duration-500">
-                        Biblioteca Técnica v7.0
+                        Biblioteca Técnica
                       </span>
                       <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 max-w-2xl leading-tight animate-in slide-in-from-bottom-4 duration-700">
                         {config.homeTitle || config.siteTitle}
@@ -773,7 +791,7 @@ function App() {
         </div>
       </main>
 
-      {view === "ADMIN" && (
+      {view === "ADMIN" && isSuperadmin && (
         <AdminPanel
           details={details}
           clients={clients}
