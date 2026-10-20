@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\Plan;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Services\DetailAccess;
 
 class UserResource extends JsonResource
 {
@@ -35,6 +36,10 @@ class UserResource extends JsonResource
                 'allows_dwg' => (bool) $plan->allows_dwg,
                 'allows_skp' => (bool) $plan->allows_skp,
                 'allows_ebooks' => (bool) $plan->allows_ebooks,
+            ],
+            'quota' => [
+                'used' => (new DetailAccess($this->resource))->quotaUsed(),
+                'limit' => $plan->detail_limit,
             ],
             'subscription' => $subscription ? [
                 'status' => $subscription->status,
