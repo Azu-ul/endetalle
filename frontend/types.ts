@@ -105,13 +105,6 @@ export interface PricingPlan {
   highlightColor?: string;
 }
 
-export interface NewsletterSubscriber {
-  id: string;
-  email: string;
-  subscribedAt: string;
-  status: "Subscribed" | "Unsubscribed";
-}
-
 export interface Tag {
   id: string;
   name: string;

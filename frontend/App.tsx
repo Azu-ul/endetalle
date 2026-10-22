@@ -54,6 +54,7 @@ import {
   Lock,
   ShieldAlert,
   Bookmark,
+  ChevronRight,
 } from "lucide-react";
 
 type ViewState =
@@ -89,6 +90,15 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(
+    () => localStorage.getItem("sidebarCollapsed") === "1",
+  );
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed((prev) => {
+      localStorage.setItem("sidebarCollapsed", prev ? "0" : "1");
+      return !prev;
+    });
+  };
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const [paywallReason, setPaywallReason] = useState<
@@ -475,8 +485,19 @@ function App() {
         </button>
       </div>
 
+      {isSidebarCollapsed && (
+        <button
+          onClick={toggleSidebar}
+          title="Mostrar menú"
+          aria-label="Mostrar menú"
+          className="hidden md:flex fixed left-0 top-1/2 -translate-y-1/2 z-30 w-6 h-12 items-center justify-center rounded-r-lg bg-white dark:bg-dark-surface border border-l-0 border-slate-200 dark:border-dark-border text-slate-400 hover:text-slate-900 dark:hover:text-white shadow-sm transition-colors"
+        >
+          <ChevronRight size={16} />
+        </button>
+      )}
+
       <div
-        className={`fixed inset-y-0 left-0 z-40 w-72 transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${isMobileMenuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"}`}
+        className={`fixed inset-y-0 left-0 z-40 w-72 shrink-0 transform transition-[transform,width] duration-300 ease-in-out md:relative md:translate-x-0 ${isSidebarCollapsed ? "md:w-0 md:overflow-hidden" : "md:w-72"} ${isMobileMenuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"}`}
       >
         <Sidebar
           categories={categories}
@@ -493,6 +514,7 @@ function App() {
           }}
           onViewPlans={() => setView("SUBSCRIPTION")}
           onOpenAuth={() => setView("AUTH")}
+          onCollapse={toggleSidebar}
           currentUser={currentUser}
           isSuperadmin={isSuperadmin}
           authLoading={authLoading}

@@ -1,6 +1,5 @@
-
-import { ConstructionDetail, ClientUser, ErrorReport, Comment, SiteConfig, PricingPlan, NewsletterSubscriber, Tag, CategoryDef } from '../types';
-import { DETAILS, CLIENTS, REPORTS, COMMENTS, DEFAULT_CONFIG, DEFAULT_PLANS, SUBSCRIBERS, DEFAULT_CATEGORIES, DEFAULT_TAGS } from '../data/content';
+import { ConstructionDetail, ClientUser, ErrorReport, Comment, SiteConfig, PricingPlan, Tag, CategoryDef } from '../types';
+import { DETAILS, CLIENTS, REPORTS, COMMENTS, DEFAULT_CONFIG, DEFAULT_PLANS, DEFAULT_CATEGORIES, DEFAULT_TAGS } from '../data/content';
 
 const STORAGE_KEYS = {
   DETAILS: 'ed_details_v7',
@@ -9,7 +8,6 @@ const STORAGE_KEYS = {
   COMMENTS: 'ed_comments_v7',
   CONFIG: 'ed_config_v7',
   PLANS: 'ed_plans_v7',
-  SUBSCRIBERS: 'ed_subscribers_v7',
   CATEGORIES: 'ed_categories_v7',
   TAGS: 'ed_tags_v7',
   FAVORITES: 'ed_favorites_v7'
@@ -69,17 +67,6 @@ export const PersistenceService = {
   },
   savePlans: (plans: PricingPlan[]) => {
     localStorage.setItem(STORAGE_KEYS.PLANS, JSON.stringify(plans));
-  },
-
-  // SUBSCRIBERS
-  getSubscribers: (): NewsletterSubscriber[] => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEYS.SUBSCRIBERS);
-      return stored ? JSON.parse(stored) : SUBSCRIBERS;
-    } catch (e) { return SUBSCRIBERS; }
-  },
-  saveSubscribers: (subscribers: NewsletterSubscriber[]) => {
-    localStorage.setItem(STORAGE_KEYS.SUBSCRIBERS, JSON.stringify(subscribers));
   },
 
   // CATEGORIES (Updated Type)
@@ -174,7 +161,6 @@ export const PersistenceService = {
         comments: localStorage.getItem(STORAGE_KEYS.COMMENTS),
         config: localStorage.getItem(STORAGE_KEYS.CONFIG),
         plans: localStorage.getItem(STORAGE_KEYS.PLANS),
-        subscribers: localStorage.getItem(STORAGE_KEYS.SUBSCRIBERS),
         categories: localStorage.getItem(STORAGE_KEYS.CATEGORIES),
         tags: localStorage.getItem(STORAGE_KEYS.TAGS),
         favorites: localStorage.getItem(STORAGE_KEYS.FAVORITES),
@@ -195,7 +181,6 @@ export const PersistenceService = {
       if (data.comments) localStorage.setItem(STORAGE_KEYS.COMMENTS, data.comments);
       if (data.config) localStorage.setItem(STORAGE_KEYS.CONFIG, data.config);
       if (data.plans) localStorage.setItem(STORAGE_KEYS.PLANS, data.plans);
-      if (data.subscribers) localStorage.setItem(STORAGE_KEYS.SUBSCRIBERS, data.subscribers);
       if (data.categories) localStorage.setItem(STORAGE_KEYS.CATEGORIES, data.categories);
       if (data.tags) localStorage.setItem(STORAGE_KEYS.TAGS, data.tags);
       if (data.favorites) {

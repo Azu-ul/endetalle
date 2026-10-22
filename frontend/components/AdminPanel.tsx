@@ -5,7 +5,6 @@ import {
   ErrorReport,
   SiteConfig,
   PricingPlan,
-  NewsletterSubscriber,
   Tag,
   CategoryDef,
   PublicationStatus,
@@ -28,7 +27,6 @@ import {
   Download,
   HardDrive,
   Database,
-  Mail,
   Search,
   CheckSquare,
   Square,
@@ -62,7 +60,6 @@ interface AdminPanelProps {
   reports?: ErrorReport[];
   config: SiteConfig;
   plans?: PricingPlan[];
-  subscribers?: NewsletterSubscriber[];
   categories?: string[];
   tags?: Tag[];
   onAdd: (detail: ConstructionDetail) => void;
@@ -84,7 +81,6 @@ type AdminView =
   | "reports"
   | "settings"
   | "commerce"
-  | "marketing"
   | "taxonomy"
   | "system"
   | "details_editor";
@@ -95,7 +91,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   reports = [],
   config,
   plans = [],
-  subscribers = [],
   categories = [],
   tags = [],
   onAdd,
@@ -125,10 +120,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     "grid",
   );
 
-  // Marketing State
-  const [showCampaignModal, setShowCampaignModal] = useState(false);
-  const [campaignSubject, setCampaignSubject] = useState("");
-
   // CRM Inspector State
   const [selectedUser, setSelectedUser] = useState<ClientUser | Author | null>(
     null,
@@ -141,7 +132,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     const safeDetails = details || [];
     const safeClients = clients || [];
     const safeReports = reports || [];
-    const safeSubs = subscribers || [];
 
     const activeClientsList = safeClients.filter((c) => c.status === "Active");
     const mrr = activeClientsList.reduce(
@@ -167,7 +157,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       verified: safeDetails.filter((d) => d.isVerified).length,
       activeClients: activeClientsList.length,
       pendingReports: safeReports.filter((r) => r.status === "Pending").length,
-      subscribers: safeSubs.length,
       mrr: mrr,
       projectedAnnual: mrr * 12,
       trafficPoints,
@@ -176,7 +165,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       onlineStaff: Math.floor(Math.random() * 5) + 1,
       newVisits: Math.floor(Math.random() * 200) + 100,
     };
-  }, [details, clients, reports, subscribers]);
+  }, [details, clients, reports]);
 
   // --- HANDLERS ---
   const handleSaveSettings = () => {
@@ -216,16 +205,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     if (confirm("¿Eliminar este plan?")) {
       setPlansForm(plansForm.filter((p) => p.id !== id));
     }
-  };
-
-  const handleSendCampaign = () => {
-    if (!campaignSubject) return;
-    alert(
-      `Campaña "${campaignSubject}" enviada a ${selectedItems.size > 0 ? selectedItems.size : "todos los"} suscriptores.`,
-    );
-    setShowCampaignModal(false);
-    setCampaignSubject("");
-    setSelectedItems(new Set());
   };
 
   const toggleSelection = (id: string) => {
@@ -579,7 +558,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 <ShoppingCart size={18} />,
                 "Planes y Precios",
               )}
-              {renderSidebarItem("marketing", <Mail size={18} />, "Marketing")}
               {renderSidebarItem(
                 "settings",
                 <Settings size={18} />,

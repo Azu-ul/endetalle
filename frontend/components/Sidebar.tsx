@@ -20,6 +20,7 @@ import {
   SquareStack,
   Bookmark,
   Crown,
+  ChevronLeft,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -34,6 +35,7 @@ interface SidebarProps {
   onOpenAdmin: () => void;
   onViewPlans: () => void;
   onOpenAuth: () => void;
+  onCollapse?: () => void;
   currentUser: any;
   isSuperadmin?: boolean;
   authLoading?: boolean;
@@ -53,6 +55,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   onOpenAdmin,
   onViewPlans,
   onOpenAuth,
+  onCollapse,
   currentUser,
   isSuperadmin = false,
   authLoading = false,
@@ -115,7 +118,18 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   return (
-    <aside className="h-full w-full md:w-72 bg-white dark:bg-dark-surface border-r border-slate-200 dark:border-dark-border flex flex-col shadow-lg z-20 transition-colors duration-300">
+    <aside className="relative h-full w-full md:w-72 bg-white dark:bg-dark-surface border-r border-slate-200 dark:border-dark-border flex flex-col shadow-lg z-20 transition-colors duration-300">
+      {onCollapse && (
+        <button
+          onClick={onCollapse}
+          title="Ocultar menú"
+          aria-label="Ocultar menú"
+          className="hidden md:flex absolute top-1/2 -right-3 -translate-y-1/2 z-30 w-6 h-6 items-center justify-center rounded-full bg-white dark:bg-dark-surface border border-slate-200 dark:border-dark-border text-slate-400 hover:text-slate-900 dark:hover:text-white shadow-sm transition-colors"
+        >
+          <ChevronLeft size={14} />
+        </button>
+      )}
+
       <div className="p-6 border-b border-slate-100 dark:border-dark-border flex items-center justify-between shrink-0">
         <div
           className="flex items-center gap-3 cursor-pointer"

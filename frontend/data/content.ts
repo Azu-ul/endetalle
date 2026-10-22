@@ -1,5 +1,5 @@
 
-import { ConstructionDetail, ClientUser, ErrorReport, Comment, SiteConfig, InternalMessage, PricingPlan, NewsletterSubscriber, Tag, CategoryDef } from '../types';
+import { ConstructionDetail, ClientUser, ErrorReport, Comment, SiteConfig, InternalMessage, PricingPlan, Tag, CategoryDef } from '../types';
 
 export const DEFAULT_AVATAR = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&auto=format&fit=crop";
 
@@ -82,12 +82,6 @@ export const DEFAULT_PLANS: PricingPlan[] = [
   }
 ];
 
-export const SUBSCRIBERS: NewsletterSubscriber[] = [
-  { id: 's-1', email: 'arquitecto@estudio.com', subscribedAt: '2024-01-15', status: 'Subscribed' },
-  { id: 's-2', email: 'student@uni.edu', subscribedAt: '2024-02-20', status: 'Subscribed' },
-  { id: 's-3', email: 'builder@constructora.com', subscribedAt: '2024-03-10', status: 'Subscribed' }
-];
-
 const TERMS_TEXT = `
 1. ACEPTACIÓN DE LOS TÉRMINOS
 Al acceder y utilizar el sitio web enDetalle (el "Servicio"), usted acepta cumplir con estos Términos de Uso. Si no está de acuerdo con alguna parte de los términos, no podrá acceder al Servicio.
@@ -141,7 +135,7 @@ export const DEFAULT_CONFIG: SiteConfig = {
   homeSubtitle: "La plataforma colaborativa definitiva para arquitectos e ingenieros. Documentación verificada y detalles constructivos de alta precisión.",
   footerText: "La biblioteca técnica colaborativa para la nueva generación de arquitectos e ingenieros.",
   paywallTitle: "Desbloquea este Detalle Constructivo",
-  paywallDescription: "Accede a planimetría DWG, especificaciones técnicas completas y soporte experto con nuestro plan Pro.",
+  paywallDescription: "Accede a planimetría DWG y a las especificaciones técnicas completas con un plan superior.",
   paywallButtonText: "Ver Planes de Suscripción"
 };
 
