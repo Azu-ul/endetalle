@@ -14,6 +14,7 @@ class UserResource extends JsonResource
         $subscription = $this->currentSubscription();
         $plan = $subscription?->plan ?? Plan::where('slug', 'free')->first();
         $endsAt = $subscription?->ends_at;
+        $access = new DetailAccess($this->resource);
 
         return [
             'id' => $this->id,
@@ -38,8 +39,9 @@ class UserResource extends JsonResource
                 'allows_ebooks' => (bool) $plan->allows_ebooks,
             ],
             'quota' => [
-                'used' => (new DetailAccess($this->resource))->quotaUsed(),
-                'limit' => $plan->detail_limit,
+                'used' => $access->quotaUsed(),
+                // El staff (admin y colaboradores) tiene acceso total: sin cupo.
+                'limit' => $access->isStaff() ? null : $plan->detail_limit,
             ],
             'subscription' => $subscription ? [
                 'status' => $subscription->status,

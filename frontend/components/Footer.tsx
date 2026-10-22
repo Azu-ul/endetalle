@@ -1,12 +1,10 @@
 import React from "react";
 import {
-  Heart,
   Twitter,
   Github,
   Linkedin,
   Mail,
   Instagram,
-  MapPin,
 } from "lucide-react";
 import { SiteConfig } from "../types";
 
@@ -115,22 +113,6 @@ const Footer: React.FC<FooterProps> = ({ config, onNavigate }) => {
                   Formulario de Contacto
                 </button>
               </li>
-              <li className="flex items-start gap-3">
-                <Mail size={16} className="text-primary-500 mt-0.5 shrink-0" />
-                <button
-                  onClick={() => onNavigate("CONTACT")}
-                  className="hover:text-slate-900 dark:hover:text-white transition-colors"
-                >
-                  Soporte Técnico
-                </button>
-              </li>
-              <li className="flex items-start gap-3">
-                <MapPin
-                  size={16}
-                  className="text-primary-500 mt-0.5 shrink-0"
-                />
-                <span>{config?.address || "BUA - Buenos Aires"}</span>
-              </li>
             </ul>
           </div>
         </div>
@@ -138,29 +120,15 @@ const Footer: React.FC<FooterProps> = ({ config, onNavigate }) => {
 
       <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-200 dark:border-dark-border/50 px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-4">
-          <div className="text-xs font-medium text-slate-400 flex items-center gap-1.5 bg-white dark:bg-dark-card px-4 py-2 rounded-full shadow-sm border border-slate-100 dark:border-dark-border/50">
-            <span>
-              © {new Date().getFullYear()} {config?.siteTitle || "enDetalle"}.
-              Creado con
-            </span>
-            <Heart size={12} className="text-red-500 fill-red-500" />
+                    <div className="flex items-center gap-4">
+            <div className="text-xs font-medium text-slate-400 flex items-center gap-1.5 bg-white dark:bg-dark-card px-4 py-2 rounded-full shadow-sm border border-slate-100 dark:border-dark-border/50">
+                <span>© {new Date().getFullYear()} {config?.siteTitle || 'enDetalle'}. Desarrollado por</span>
+                {CREDIT_URL
+                  ? <a href={CREDIT_URL} target="_blank" rel="noreferrer" className="font-bold hover:text-primary-500 transition-colors">Azu Páginas Web</a>
+                  : <span className="font-bold">Azu Páginas Web</span>}
+            </div>
           </div>
-          <span className="text-xs text-slate-400">
-            Desarrollado por{" "}
-            {CREDIT_URL ? (
-              <a
-                href={CREDIT_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="font-bold hover:text-primary-500 transition-colors"
-              >
-                Azu Páginas Web
-              </a>
-            ) : (
-              <span className="font-bold">Azu Páginas Web</span>
-            )}
-          </span>
-        </div>
+          </div>
 
         <div className="flex gap-4">
           {links.twitter && (

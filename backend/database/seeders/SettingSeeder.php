@@ -11,7 +11,7 @@ class SettingSeeder extends Seeder
     public function run(): void
     {
         $data = json_decode(file_get_contents(database_path('seeders/data/seed.json')), true);
-        $config = $data['config'] + ['address' => 'BUA - Buenos Aires'];
+        $config = $data['config'] + ['address' => '3 de Febrero 2851, Mar del Plata, Buenos Aires'];
 
         foreach ($config as $key => $value) {
             DB::table('settings')->insertOrIgnore([

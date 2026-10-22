@@ -482,6 +482,8 @@ function App() {
           categories={categories}
           selectedCategory={selectedCategory}
           onSelectCategory={handleSelectCategory}
+          selectedSubcategory={selectedSubcategory}
+          onSelectSubcategory={setSelectedSubcategory}
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           totalItems={filteredDetails.length}
@@ -748,7 +750,7 @@ function App() {
               <SubscriptionPage plans={plans} onSubscribe={handleSubscribe} />
             )}
             {view === "MESSAGES" && <MessagesPanel />}
-            {view === "CONTACT" && <ContactPage />}
+            {view === "CONTACT" && <ContactPage config={config} />}
             {view === "AUTHORS" && (
               <AuthorsPage
                 authors={topAuthors}

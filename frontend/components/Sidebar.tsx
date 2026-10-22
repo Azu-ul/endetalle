@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AccessLevel, CategoryDef } from "../types";
 import {
   Search,
@@ -26,6 +26,8 @@ interface SidebarProps {
   categories: CategoryDef[];
   selectedCategory: string | "all";
   onSelectCategory: (category: string | "all") => void;
+  selectedSubcategory?: string | null;
+  onSelectSubcategory?: (sub: string | null) => void;
   searchTerm: string;
   onSearchChange: (term: string) => void;
   totalItems: number;
@@ -46,6 +48,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   categories,
   selectedCategory,
   onSelectCategory,
+  selectedSubcategory = null,
+  onSelectSubcategory,
   searchTerm,
   onSearchChange,
   isDarkMode,
@@ -60,12 +64,30 @@ const Sidebar: React.FC<SidebarProps> = ({
   savedCount = 0,
   onOpenFavorites,
 }) => {
-  const [expandedCat, setExpandedCat] = useState<string | null>(null);
+  const [expandedCats, setExpandedCats] = useState<string[]>([]);
 
-  const toggleExpand = (catId: string) => {
-    setExpandedCat(expandedCat === catId ? null : catId);
-    onSelectCategory(catId);
+  const toggleExpand = (catName: string) => {
+    const isOpen = expandedCats.includes(catName);
+    if (isOpen && selectedCategory === catName) {
+      // Abierta y seleccionada: se cierra, sin cambiar de vista ni de subcategoría
+      setExpandedCats((prev) => prev.filter((c) => c !== catName));
+    } else {
+      // Cerrada, o abierta pero no seleccionada: se abre (si hace falta) y se selecciona
+      setExpandedCats((prev) =>
+        prev.includes(catName) ? prev : [...prev, catName],
+      );
+      if (selectedCategory !== catName) onSelectCategory(catName);
+    }
   };
+
+  // Si la categoría se selecciona desde otro lado, se despliega sola
+  useEffect(() => {
+    if (selectedCategory !== "all") {
+      setExpandedCats((prev) =>
+        prev.includes(selectedCategory) ? prev : [...prev, selectedCategory],
+      );
+    }
+  }, [selectedCategory]);
 
   const getCategoryIcon = (id: string) => {
     switch (id) {
@@ -219,7 +241,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* HIERARCHICAL CATEGORIES */}
         {categories.map((cat) => {
           const isSelected = selectedCategory === cat.name;
-          const isExpanded = expandedCat === cat.name || isSelected;
+          const isExpanded = expandedCats.includes(cat.name);
           const hasSubs = cat.subcategories.length > 0;
 
           return (
@@ -235,10 +257,34 @@ const Sidebar: React.FC<SidebarProps> = ({
                 {hasSubs && (
                   <ChevronDown
                     size={14}
-                    className={`transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                    className={`transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`}
                   />
                 )}
               </button>
+              {hasSubs && (
+                <div
+                  aria-hidden={!isExpanded}
+                  className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
+                >
+                  <div className="overflow-hidden min-h-0">
+                    <div className="ml-6 mt-1 mb-1 pl-3 border-l border-slate-200 dark:border-dark-border space-y-0.5">
+                      {cat.subcategories.map((sub) => (
+                        <button
+                          key={sub}
+                          tabIndex={isExpanded ? 0 : -1}
+                          onClick={() => {
+                            onSelectCategory(cat.name);
+                            onSelectSubcategory?.(sub);
+                          }}
+                          className={`w-full text-left px-3 py-1.5 rounded-md text-xs transition-colors ${selectedSubcategory === sub && isSelected ? "text-primary-700 dark:text-primary-400 font-semibold" : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"}`}
+                        >
+                          {sub}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}
