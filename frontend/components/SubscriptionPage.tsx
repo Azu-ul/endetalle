@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { CheckCircle2, X, Zap, Crown, GraduationCap, ShieldCheck, Download, Users, ArrowDown, HelpCircle, Star } from 'lucide-react';
 import { PricingPlan } from '../types';
 
@@ -9,7 +9,68 @@ interface SubscriptionPageProps {
 }
 
 const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ plans, onSubscribe }) => {
-  
+
+  // Moneda (pesos con Mercado Pago, dólares con PayPal) y período de pago elegidos
+  const [currency, setCurrency] = useState<'ARS' | 'USD'>('ARS');
+  const [periodId, setPeriodId] = useState<'monthly' | 'quarterly' | 'yearly'>('monthly');
+
+  const money = (n: number) =>
+    new Intl.NumberFormat('es-AR', {
+      style: 'currency',
+      currency,
+      maximumFractionDigits: currency === 'ARS' || Number.isInteger(n) ? 0 : 2,
+    }).format(n);
+
+  // Descuento de cada período, tomado de los planes que vienen de la API
+  const discountOf = (id: string) =>
+    plans.flatMap((p) => p.periods ?? []).find((p) => p.id === id)?.discountPercent ?? 0;
+
+  const PERIOD_OPTIONS: { id: 'monthly' | 'quarterly' | 'yearly'; label: string }[] = [
+    { id: 'monthly', label: 'Mensual' },
+    { id: 'quarterly', label: '3 meses' },
+    { id: 'yearly', label: 'Anual' },
+  ];
+
+  const renderPrice = (plan: PricingPlan) => {
+    const muted = plan.highlightColor === 'slate' ? 'text-slate-400' : 'text-slate-500';
+    const period = plan.periods?.find((p) => p.id === periodId);
+
+    // Plan gratuito (o plan sin períodos): se muestra el precio tal cual
+    if (plan.price === 0 || !period) {
+      return (
+        <div className="mb-6">
+          <span className="text-4xl font-bold">{money(plan.price === 0 ? 0 : plan.price)}</span>
+          <span className={`text-sm ${muted}`}>/mes</span>
+          <div className="mt-1 h-5" />
+        </div>
+      );
+    }
+
+    const perMonth = currency === 'ARS' ? period.perMonthArs : period.perMonthUsd;
+    const total = currency === 'ARS' ? period.totalArs : period.totalUsd;
+
+    return (
+      <div className="mb-6">
+        <div>
+          <span className="text-4xl font-bold">{money(perMonth)}</span>
+          <span className={`text-sm ${muted}`}>/mes</span>
+        </div>
+        <div className={`flex items-center gap-2 text-xs mt-1 h-5 ${muted}`}>
+          <span>
+            {period.months === 1
+              ? 'Se cobra cada mes'
+              : `${money(total)} cada ${period.months === 12 ? 'año' : `${period.months} meses`}`}
+          </span>
+          {period.discountPercent > 0 && (
+            <span className="font-bold px-2 py-0.5 rounded-full bg-green-500/15 text-green-500">
+              -{period.discountPercent}%
+            </span>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   const scrollToPlans = () => {
     document.getElementById('pricing-section')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -31,7 +92,7 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ plans, onSubscribe 
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600">Construir Mejor</span>
                 </h1>
                 <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-12 leading-relaxed">
-                    Accede a la biblioteca más completa de detalles constructivos, normativas y herramientas IA. Ahorra cientos de horas en documentación.
+                    Accede a la biblioteca más completa de detalles constructivos, normativas y recursos técnicos. Ahorra cientos de horas en documentación.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <button onClick={scrollToPlans} className="bg-primary-400 hover:bg-primary-500 text-slate-900 text-lg font-bold px-8 py-4 rounded-xl shadow-xl shadow-primary-400/20 hover:scale-105 transition-all">
@@ -50,10 +111,6 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ plans, onSubscribe 
                     <div className="flex flex-col items-center">
                         <span className="text-3xl font-bold text-white">500+</span>
                         <span className="text-sm font-medium">Detalles DWG</span>
-                    </div>
-                    <div className="flex flex-col items-center">
-                        <span className="text-3xl font-bold text-white">24/7</span>
-                        <span className="text-sm font-medium">Soporte IA</span>
                     </div>
                 </div>
             </div>
@@ -91,7 +148,7 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ plans, onSubscribe 
                     </div>
                     <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Comunidad Activa</h3>
                     <p className="text-slate-500 dark:text-slate-400 leading-relaxed">
-                        Accede a soporte directo de los autores y resuelve dudas constructivas en minutos.
+                        Comenta y debate soluciones de obra con otros arquitectos y estudiantes de la comunidad.
                     </p>
                 </div>
             </div>
@@ -139,6 +196,49 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ plans, onSubscribe 
                 <p className="text-lg text-slate-500 dark:text-slate-400">Invierte en tu carrera profesional hoy.</p>
             </div>
 
+            {/* Período y moneda */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+                <div className="inline-flex p-1 rounded-xl bg-slate-100 dark:bg-dark-bg">
+                    {PERIOD_OPTIONS.map((o) => {
+                        const active = periodId === o.id;
+                        const discount = discountOf(o.id);
+                        return (
+                            <button
+                                key={o.id}
+                                type="button"
+                                aria-pressed={active}
+                                onClick={() => setPeriodId(o.id)}
+                                className={`px-5 py-2 rounded-lg text-sm font-bold transition-all ${
+                                    active
+                                        ? 'bg-white dark:bg-dark-surface text-slate-900 dark:text-white shadow-sm'
+                                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white'
+                                }`}
+                            >
+                                {o.label}
+                                {discount > 0 && <span className="ml-1.5 text-xs text-green-500">-{discount}%</span>}
+                            </button>
+                        );
+                    })}
+                </div>
+                <div className="inline-flex p-1 rounded-xl bg-slate-100 dark:bg-dark-bg">
+                    {([['ARS', 'Pesos'], ['USD', 'Dólares']] as const).map(([id, label]) => (
+                        <button
+                            key={id}
+                            type="button"
+                            aria-pressed={currency === id}
+                            onClick={() => setCurrency(id)}
+                            className={`px-5 py-2 rounded-lg text-sm font-bold transition-all ${
+                                currency === id
+                                    ? 'bg-white dark:bg-dark-surface text-slate-900 dark:text-white shadow-sm'
+                                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white'
+                            }`}
+                        >
+                            {label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
                 
                 {plans.map((plan) => (
@@ -170,10 +270,7 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = ({ plans, onSubscribe 
                             <span className={`font-bold ${plan.highlightColor === 'slate' ? 'text-white' : 'text-slate-500 dark:text-primary-400'}`}>{plan.name}</span>
                         </div>
 
-                        <div className="mb-6">
-                            <span className="text-4xl font-bold">${plan.price}</span>
-                            <span className={`text-sm ${plan.highlightColor === 'slate' ? 'text-slate-400' : 'text-slate-500'}`}>/{plan.interval}</span>
-                        </div>
+                        {renderPrice(plan)}
 
                         <p className={`text-sm mb-8 h-10 ${plan.highlightColor === 'slate' ? 'text-slate-400' : 'text-slate-500'}`}>{plan.description}</p>
 

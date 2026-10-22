@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             SettingSeeder::class,
             DemoSeeder::class,
+            DemoPremiumSeeder::class,
         ]);
     }
 }

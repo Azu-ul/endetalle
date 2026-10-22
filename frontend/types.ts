@@ -79,10 +79,25 @@ export interface SiteConfig {
   paywallButtonText?: string;
 }
 
+// Un período de pago de un plan (mensual, 3 meses, anual) con su total en cada moneda
+export interface PlanPeriod {
+  id: "monthly" | "quarterly" | "yearly";
+  months: number;
+  discountPercent: number;
+  totalArs: number;
+  totalUsd: number;
+  perMonthArs: number;
+  perMonthUsd: number;
+}
+
 export interface PricingPlan {
   id: string;
+  slug?: string;
   name: string;
   price: number;
+  priceArs?: number;
+  priceUsd?: number;
+  periods?: PlanPeriod[];
   interval: "mo" | "yr";
   description: string;
   features: string[];

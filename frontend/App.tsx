@@ -13,6 +13,15 @@ import AuthorsPage from "./components/AuthorsPage";
 import LegalPage from "./components/LegalPage";
 import AuthPage from "./components/AuthPage";
 import UserDashboard from "./components/UserDashboard";
+import ExplorerToolbar from "./components/ExplorerToolbar";
+import {
+  DEFAULT_FILTERS,
+  filterDetails,
+  getSelectionTitle,
+  subKey,
+  type ExplorerFilters,
+  type SortOption,
+} from "./components/explorerFilters";
 import {
   AuthApi,
   SiteApi,
@@ -32,7 +41,6 @@ import {
   ErrorReport,
   Comment,
   SiteConfig,
-  AccessLevel,
   PricingPlan,
   Tag,
   CategoryDef,
@@ -45,8 +53,6 @@ import {
   ArrowUpRight,
   Lock,
   ShieldAlert,
-  ChevronRight,
-  Calendar,
   Bookmark,
 } from "lucide-react";
 
@@ -80,12 +86,6 @@ function App() {
   const [selectedDetail, setSelectedDetail] =
     useState<ConstructionDetail | null>(null);
   const [selectedAuthor, setSelectedAuthor] = useState<Author | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | "all">(
-    "all",
-  );
-  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(
-    null,
-  );
   const [searchTerm, setSearchTerm] = useState("");
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -94,7 +94,8 @@ function App() {
   const [paywallReason, setPaywallReason] = useState<
     "login" | "plan" | "quota"
   >("plan");
-  const [sortBy, setSortBy] = useState<"popular" | "date">("popular");
+  const [sortBy, setSortBy] = useState<SortOption>("popular");
+  const [filters, setFilters] = useState<ExplorerFilters>(DEFAULT_FILTERS);
 
   const [currentUser, setCurrentUser] = useState<ClientUser | null>(null);
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
@@ -132,8 +133,8 @@ function App() {
     view,
     selectedDetail?.id,
     selectedAuthor?.name,
-    selectedCategory,
-    selectedSubcategory,
+    filters.categories,
+    filters.subcategories,
   ]);
 
   useEffect(() => {
@@ -173,35 +174,22 @@ function App() {
     else document.body.classList.remove("dark");
   }, [isDarkMode]);
 
-  // CATEGORY HANDLING
-  const activeCategoryDef = useMemo(() => {
-    if (selectedCategory === "all") return null;
-    return categories.find((c) => c.name === selectedCategory) || null;
-  }, [categories, selectedCategory]);
+  // Detalles visibles, sin filtrar (el explorador los usa para los contadores)
+  const baseDetails = useMemo(
+    () =>
+      details.filter(
+        (detail) => detail.status === "Published" || view === "ADMIN",
+      ),
+    [details, view],
+  );
 
   const filteredDetails = useMemo(() => {
-    let list = details.filter(
-      (detail) => detail.status === "Published" || view === "ADMIN",
-    );
-
-    // Filter by Category
-    if (selectedCategory !== "all") {
-      list = list.filter((d) => d.category === selectedCategory);
-    }
-
-    // Filter by Subcategory
-    if (selectedSubcategory) {
-      list = list.filter((d) => d.subcategory === selectedSubcategory);
-    }
-
-    // Search
-    if (searchTerm) {
-      list = list.filter(
-        (d) =>
-          d.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          d.description.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
-    }
+    // Búsqueda + categorías + etiquetas + resto de filtros
+    const list = filterDetails(baseDetails, {
+      search: searchTerm,
+      filters,
+      favoriteIds,
+    });
 
     // Sort
     if (sortBy === "date") {
@@ -210,19 +198,21 @@ function App() {
           new Date(b.publishedDate || 0).getTime() -
           new Date(a.publishedDate || 0).getTime(),
       );
+    } else if (sortBy === "az") {
+      list.sort((a, b) =>
+        a.title.localeCompare(b.title, "es", { sensitivity: "base" }),
+      );
+    } else if (sortBy === "za") {
+      list.sort((a, b) =>
+        b.title.localeCompare(a.title, "es", { sensitivity: "base" }),
+      );
     } else {
       list.sort((a, b) => (b.likes || 0) - (a.likes || 0));
     }
     return list;
-  }, [
-    details,
-    view,
-    sortBy,
-    selectedCategory,
-    selectedSubcategory,
-    searchTerm,
-  ]);
+  }, [baseDetails, sortBy, filters, favoriteIds, searchTerm]);
 
+  // Autores únicos para la página de Autores
   const topAuthors = useMemo(() => {
     const map = new Map<string, Author>();
     details.forEach((d) => {
@@ -231,9 +221,24 @@ function App() {
     return Array.from(map.values());
   }, [details]);
 
+  // Desde el Sidebar: ir a UNA categoría (o a "all" para ver todo)
   const handleSelectCategory = (cat: string | "all") => {
-    setSelectedCategory(cat);
-    setSelectedSubcategory(null); // Reset subcategory on main change
+    setFilters((f) => ({
+      ...f,
+      categories: cat === "all" ? [] : [cat],
+      subcategories: [],
+    }));
+    if (isMobileMenuOpen) setIsMobileMenuOpen(false);
+    setView("HOME");
+  };
+
+  // Desde el Sidebar: ir a UNA subcategoría
+  const handleSelectSubcategory = (cat: string, sub: string) => {
+    setFilters((f) => ({
+      ...f,
+      categories: [cat],
+      subcategories: [subKey(cat, sub)],
+    }));
     if (isMobileMenuOpen) setIsMobileMenuOpen(false);
     setView("HOME");
   };
@@ -269,11 +274,6 @@ function App() {
     setView("HOME");
     setSelectedDetail(null);
     setSelectedAuthor(null);
-  };
-
-  const handleExploreNew = () => {
-    setSortBy("date");
-    setView("HOME");
   };
 
   const handleNavigate = (target: ViewState) => {
@@ -480,12 +480,10 @@ function App() {
       >
         <Sidebar
           categories={categories}
-          selectedCategory={selectedCategory}
+          selectedCategories={filters.categories}
           onSelectCategory={handleSelectCategory}
-          selectedSubcategory={selectedSubcategory}
-          onSelectSubcategory={setSelectedSubcategory}
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
+          selectedSubcategories={filters.subcategories}
+          onSelectSubcategory={handleSelectSubcategory}
           totalItems={filteredDetails.length}
           isDarkMode={isDarkMode}
           toggleDarkMode={() => setIsDarkMode(!isDarkMode)}
@@ -515,104 +513,28 @@ function App() {
           <div className="flex-1">
             {view === "HOME" && (
               <div className="max-w-[1800px] mx-auto">
-                {/* GLOBAL HERO - Only show when no search and ALL categories selected */}
-                {!searchTerm && selectedCategory === "all" && (
-                  <div className="relative rounded-3xl overflow-hidden bg-slate-900 dark:bg-black border border-slate-200 dark:border-dark-border mb-12 shadow-2xl h-[400px] group">
-                    <img
-                      src={config.headerImageUrl}
-                      className="w-full h-full object-cover opacity-60 mix-blend-overlay transition-transform duration-1000 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent flex flex-col justify-center px-12 md:px-20">
-                      <span className="text-primary-400 font-bold tracking-widest uppercase mb-4 text-sm animate-in slide-in-from-left-4 duration-500">
-                        Biblioteca Técnica
-                      </span>
-                      <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 max-w-2xl leading-tight animate-in slide-in-from-bottom-4 duration-700">
-                        {config.homeTitle || config.siteTitle}
-                      </h1>
-                      <p className="text-xl text-slate-300 max-w-xl mb-8 leading-relaxed animate-in slide-in-from-bottom-5 duration-700 delay-100">
-                        {config.homeSubtitle ||
-                          "La plataforma colaborativa definitiva para arquitectos e ingenieros."}
-                      </p>
-                      <button
-                        onClick={handleExploreNew}
-                        className="bg-primary-400 hover:bg-primary-500 text-slate-900 px-8 py-4 rounded-xl font-bold text-lg w-fit flex items-center gap-3 transition-all hover:gap-4 shadow-lg shadow-primary-400/20 animate-in zoom-in-95 duration-500 delay-200"
-                      >
-                        Explorar Novedades <ChevronRight size={20} />
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {/* CATEGORY HERO - Show when a specific category is selected */}
-                {activeCategoryDef && (
-                  <div className="relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 dark:border-dark-border mb-12 shadow-xl h-[250px] animate-in fade-in slide-in-from-top-4">
-                    <img
-                      src={activeCategoryDef.imageUrl}
-                      className="w-full h-full object-cover opacity-50"
-                    />
-                    <div className="absolute inset-0 bg-black/40 flex flex-col justify-center px-12">
-                      <h1 className="text-4xl font-bold text-white mb-2">
-                        {activeCategoryDef.name}
-                      </h1>
-                      <p className="text-slate-200 text-lg">
-                        Explorando detalles y documentación técnica.
-                      </p>
-
-                      {/* Subcategory Pills */}
-                      {activeCategoryDef.subcategories.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mt-6">
-                          <button
-                            onClick={() => setSelectedSubcategory(null)}
-                            className={`px-4 py-2 rounded-full text-sm font-bold transition-all border ${!selectedSubcategory ? "bg-white text-slate-900 border-white" : "bg-transparent text-white border-white/30 hover:bg-white/10"}`}
-                          >
-                            Todos
-                          </button>
-                          {activeCategoryDef.subcategories.map((sub) => (
-                            <button
-                              key={sub}
-                              onClick={() => setSelectedSubcategory(sub)}
-                              className={`px-4 py-2 rounded-full text-sm font-bold transition-all border ${selectedSubcategory === sub ? "bg-primary-400 text-slate-900 border-primary-400" : "bg-transparent text-white border-white/30 hover:bg-white/10"}`}
-                            >
-                              {sub}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     {searchTerm
                       ? `Resultados para "${searchTerm}"`
-                      : selectedCategory !== "all"
-                        ? selectedSubcategory
-                          ? `${selectedCategory} > ${selectedSubcategory}`
-                          : selectedCategory
-                        : sortBy === "date"
-                          ? "Novedades Recientes"
-                          : "Más Populares"}
+                      : getSelectionTitle(filters)}
                     <span className="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded-full text-slate-500">
                       {filteredDetails.length}
                     </span>
                   </h2>
-                  <div className="flex bg-white dark:bg-dark-surface p-1 rounded-xl border border-slate-200 dark:border-dark-border">
-                    <button
-                      onClick={() => setSortBy("popular")}
-                      className={`px-4 py-2 text-sm font-bold rounded-lg transition-colors ${sortBy === "popular" ? "bg-slate-100 dark:bg-dark-bg text-primary-600" : "text-slate-500"}`}
-                    >
-                      Populares
-                    </button>
-                    <button
-                      onClick={() => setSortBy("date")}
-                      className={`px-4 py-2 text-sm font-bold rounded-lg transition-colors ${sortBy === "date" ? "bg-slate-100 dark:bg-dark-bg text-primary-600" : "text-slate-500"}`}
-                    >
-                      Recientes
-                    </button>
-                  </div>
                 </div>
-
+                <ExplorerToolbar
+                  details={baseDetails}
+                  favoriteIds={favoriteIds}
+                  categories={categories}
+                  searchTerm={searchTerm}
+                  onSearchChange={setSearchTerm}
+                  sortBy={sortBy}
+                  onSortChange={setSortBy}
+                  filters={filters}
+                  onFiltersChange={setFilters}
+                  resultCount={filteredDetails.length}
+                />
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {filteredDetails.map((detail) => (
                     <div
@@ -706,6 +628,17 @@ function App() {
                     </div>
                   ))}
                 </div>
+
+                {filteredDetails.length === 0 && (
+                  <div className="text-center py-20 text-slate-500 dark:text-slate-400">
+                    <p className="font-bold text-lg">
+                      No encontramos detalles con esos filtros
+                    </p>
+                    <p className="text-sm mt-1">
+                      Probá quitar algún filtro o cambiar la búsqueda.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 

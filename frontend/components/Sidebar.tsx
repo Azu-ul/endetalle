@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AccessLevel, CategoryDef } from "../types";
 import {
-  Search,
   LayoutGrid,
   ChevronRight,
   ChevronDown,
@@ -20,16 +19,15 @@ import {
   Zap,
   SquareStack,
   Bookmark,
+  Crown,
 } from "lucide-react";
 
 interface SidebarProps {
   categories: CategoryDef[];
-  selectedCategory: string | "all";
+  selectedCategories: string[];
   onSelectCategory: (category: string | "all") => void;
-  selectedSubcategory?: string | null;
-  onSelectSubcategory?: (sub: string | null) => void;
-  searchTerm: string;
-  onSearchChange: (term: string) => void;
+  selectedSubcategories?: string[]; // claves "Categoría::Subcategoría"
+  onSelectSubcategory?: (category: string, sub: string) => void;
   totalItems: number;
   isDarkMode: boolean;
   toggleDarkMode: () => void;
@@ -46,12 +44,10 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({
   categories,
-  selectedCategory,
+  selectedCategories,
   onSelectCategory,
-  selectedSubcategory = null,
+  selectedSubcategories = [],
   onSelectSubcategory,
-  searchTerm,
-  onSearchChange,
   isDarkMode,
   toggleDarkMode,
   onOpenAdmin,
@@ -68,7 +64,8 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const toggleExpand = (catName: string) => {
     const isOpen = expandedCats.includes(catName);
-    if (isOpen && selectedCategory === catName) {
+    const isSel = selectedCategories.includes(catName);
+    if (isOpen && isSel) {
       // Abierta y seleccionada: se cierra, sin cambiar de vista ni de subcategoría
       setExpandedCats((prev) => prev.filter((c) => c !== catName));
     } else {
@@ -76,18 +73,19 @@ const Sidebar: React.FC<SidebarProps> = ({
       setExpandedCats((prev) =>
         prev.includes(catName) ? prev : [...prev, catName],
       );
-      if (selectedCategory !== catName) onSelectCategory(catName);
+      if (!isSel) onSelectCategory(catName);
     }
   };
 
-  // Si la categoría se selecciona desde otro lado, se despliega sola
+  // Si las categorías se seleccionan desde otro lado, se despliegan solas
   useEffect(() => {
-    if (selectedCategory !== "all") {
-      setExpandedCats((prev) =>
-        prev.includes(selectedCategory) ? prev : [...prev, selectedCategory],
-      );
+    if (selectedCategories.length > 0) {
+      setExpandedCats((prev) => [
+        ...prev,
+        ...selectedCategories.filter((c) => !prev.includes(c)),
+      ]);
     }
-  }, [selectedCategory]);
+  }, [selectedCategories]);
 
   const getCategoryIcon = (id: string) => {
     switch (id) {
@@ -109,6 +107,8 @@ const Sidebar: React.FC<SidebarProps> = ({
         return <Tent size={18} />;
       case "instalaciones":
         return <Zap size={18} />;
+      case "premium":
+        return <Crown size={18} />;
       default:
         return <LayoutGrid size={18} />;
     }
@@ -129,22 +129,6 @@ const Sidebar: React.FC<SidebarProps> = ({
               enDetalle
             </h1>
           </div>
-        </div>
-      </div>
-
-      <div className="p-4 sticky top-0 z-10 bg-white/95 dark:bg-dark-surface/95 backdrop-blur-sm border-b border-slate-100 dark:border-dark-border/50">
-        <div className="relative group">
-          <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary-500 transition-colors"
-            size={16}
-          />
-          <input
-            type="text"
-            placeholder="Buscar detalle..."
-            value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-lg pl-10 pr-4 py-2.5 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-400/50 transition-all"
-          />
         </div>
       </div>
 
@@ -195,7 +179,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
         <button
           onClick={() => onSelectCategory("all")}
-          className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all group border border-transparent ${selectedCategory === "all" ? "bg-primary-50 dark:bg-primary-400/10 text-primary-700 dark:text-primary-400 font-semibold" : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-dark-bg"}`}
+          className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all group border border-transparent ${selectedCategories.length === 0 ? "bg-primary-50 dark:bg-primary-400/10 text-primary-700 dark:text-primary-400 font-semibold" : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-dark-bg"}`}
         >
           <div className="flex items-center gap-3">
             <LayoutGrid size={18} />
@@ -240,7 +224,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
         {/* HIERARCHICAL CATEGORIES */}
         {categories.map((cat) => {
-          const isSelected = selectedCategory === cat.name;
+          const isSelected = selectedCategories.includes(cat.name);
           const isExpanded = expandedCats.includes(cat.name);
           const hasSubs = cat.subcategories.length > 0;
 
@@ -272,11 +256,8 @@ const Sidebar: React.FC<SidebarProps> = ({
                         <button
                           key={sub}
                           tabIndex={isExpanded ? 0 : -1}
-                          onClick={() => {
-                            onSelectCategory(cat.name);
-                            onSelectSubcategory?.(sub);
-                          }}
-                          className={`w-full text-left px-3 py-1.5 rounded-md text-xs transition-colors ${selectedSubcategory === sub && isSelected ? "text-primary-700 dark:text-primary-400 font-semibold" : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"}`}
+                          onClick={() => onSelectSubcategory?.(cat.name, sub)}
+                          className={`w-full text-left px-3 py-1.5 rounded-md text-xs transition-colors ${selectedSubcategories.includes(`${cat.name}::${sub}`) ? "text-primary-700 dark:text-primary-400 font-semibold" : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"}`}
                         >
                           {sub}
                         </button>

@@ -13,7 +13,12 @@ class CategorySeeder extends Seeder
         $data = json_decode(file_get_contents(database_path('seeders/data/seed.json')), true);
         $now = now();
 
-        foreach ($data['categories'] as $i => $cat) {
+        // Categoría Premium: solo para el plan Pro (los detalles que se carguen ahí piden plan Pro)
+        $categories = array_merge($data['categories'], [
+            ['name' => 'Premium', 'imageUrl' => null, 'subcategories' => []],
+        ]);
+
+        foreach ($categories as $i => $cat) {
             $slug = Str::slug($cat['name']);
 
             $parentId = DB::table('categories')->whereNull('parent_id')->where('slug', $slug)->value('id');

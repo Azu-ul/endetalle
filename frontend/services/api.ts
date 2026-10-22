@@ -185,6 +185,17 @@ export interface ApiPlan {
   slug: string;
   name: string;
   price: number;
+  price_ars: number;
+  price_usd: number;
+  periods: {
+    id: "monthly" | "quarterly" | "yearly";
+    months: number;
+    discount_percent: number;
+    total_ars: number;
+    total_usd: number;
+    per_month_ars: number;
+    per_month_usd: number;
+  }[];
   interval: string;
   description: string | null;
   features: string[];
@@ -253,8 +264,20 @@ export function toCategory(c: ApiCategory): CategoryDef {
 export function toPlan(p: ApiPlan): PricingPlan {
   return {
     id: String(p.id),
+    slug: p.slug,
     name: p.name,
     price: p.price,
+    priceArs: p.price_ars,
+    priceUsd: p.price_usd,
+    periods: (p.periods ?? []).map((x) => ({
+      id: x.id,
+      months: x.months,
+      discountPercent: x.discount_percent,
+      totalArs: x.total_ars,
+      totalUsd: x.total_usd,
+      perMonthArs: x.per_month_ars,
+      perMonthUsd: x.per_month_usd,
+    })),
     interval: p.interval === "year" ? "yr" : "mo",
     description: p.description ?? "",
     features: p.features,

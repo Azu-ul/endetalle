@@ -57,9 +57,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ config }) => {
                   Email
                 </h3>
                 <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                  hola@endetalle.com
-                  <br />
-                  soporte@endetalle.com
+                  estudio.nelli@gmail.com
                 </p>
               </div>
             </div>
@@ -72,9 +70,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ config }) => {
                   Horario
                 </h3>
                 <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                  Lun - Vie: 9am - 6pm
-                  <br />
-                  Sab: 10am - 1pm
+                  Lun - Vie: 9am - 5pm
                 </p>
               </div>
             </div>

@@ -4,7 +4,6 @@ import {
   CheckCircle2,
   Crown,
   ArrowRight,
-  ShieldCheck,
 } from "lucide-react";
 import { ConstructionDetail, SiteConfig } from "../types";
 
@@ -42,7 +41,7 @@ const Paywall: React.FC<PaywallProps> = ({
       title: config.paywallTitle || "Desbloqueá este Detalle Constructivo",
       text:
         config.paywallDescription ||
-        "Accedé a planimetría DWG, especificaciones técnicas completas y soporte experto con un plan superior.",
+        "Accedé a planimetría DWG y a las especificaciones técnicas completas con un plan superior.",
       button: config.paywallButtonText || "Ver Planes de Suscripción",
       action: onSubscribe,
     },
@@ -92,7 +91,7 @@ const Paywall: React.FC<PaywallProps> = ({
             <div className="flex items-center gap-3">
               <CheckCircle2 className="text-green-500 shrink-0" size={20} />
               <span className="text-sm dark:text-slate-300 font-medium">
-                Soporte directo de autores
+                Especificaciones y materiales completos
               </span>
             </div>
           </div>
@@ -110,10 +109,6 @@ const Paywall: React.FC<PaywallProps> = ({
           >
             Quizás más tarde
           </button>
-        </div>
-
-        <div className="bg-slate-50 dark:bg-dark-bg p-4 flex items-center justify-center gap-2 text-xs text-slate-400 border-t dark:border-dark-border">
-          <ShieldCheck size={14} /> Garantía de satisfacción de 30 días
         </div>
       </div>
     </div>
